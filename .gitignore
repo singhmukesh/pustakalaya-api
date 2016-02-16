@@ -22,7 +22,7 @@
 *.rbc
 capybara-*.html
 .rspec
-/public/system
+public/
 /coverage/
 /spec/tmp
 **.orig
