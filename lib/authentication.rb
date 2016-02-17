@@ -49,20 +49,5 @@ module Authentication
         raise CustomException::DomainConflict
       end
     end
-
-    # Verify whether the user details is present in system database and if not present create the new user with avilable details
-    #
-    # @params auth [HTTParty::Response], Hash containing response of Google Oauth validation
-    #
-    # @return [User::ActiveRecord_Relation], Active Record Object containing the user details
-    def find_user(auth)
-      user = User.find_by(uid: auth[:id])
-      unless user
-        User.create(name: auth['name'],
-        email: auth['email'],
-        image: auth['picture'],
-        uid: auth['id'])
-      end
-    end
   end
 end

@@ -16,7 +16,7 @@ class V1::ApplicationController < ActionController::API
     auth = Authentication::authenticate_with_oauth(token)
 
     Authentication::authenticate_domain(auth) if ENV['AUTH_DOMAIN']
-    @current_user = Authentication::find_user(auth)
+    @current_user = User.find_user(auth)
   end
 
   # Provide Authenticated current user details
