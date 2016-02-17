@@ -14,3 +14,5 @@ en:
       date: '%Y-%m-%d'
       time: '%H:%M:%S'
       datetime: '%Y-%m-%d %H:%M:%S'
+    publish_date:
+      before: Pulish date should be before current date.
