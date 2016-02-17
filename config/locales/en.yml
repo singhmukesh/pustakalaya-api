@@ -20,4 +20,7 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  exception:
+    unauthorized: Unauthorized request
+    request_time_out: Request time out
+    domain_conflict: Domain conflict
