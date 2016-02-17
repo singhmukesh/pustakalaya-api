@@ -11,7 +11,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160216093344) do
+ActiveRecord::Schema.define(version: 20160217092119) do
+
+  create_table "items", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string   "name",                                    null: false
+    t.string   "code",                                    null: false
+    t.integer  "quantity",                                null: false
+    t.text     "description",   limit: 65535,             null: false
+    t.string   "image",                                   null: false
+    t.integer  "status",                      default: 0, null: false
+    t.integer  "is_readable",                             null: false
+    t.integer  "is_leaseable",                            null: false
+    t.integer  "is_rateable",                             null: false
+    t.integer  "is_reviewable",                           null: false
+    t.string   "type",                                    null: false
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
+  end
 
   create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "role",       default: 0, null: false
