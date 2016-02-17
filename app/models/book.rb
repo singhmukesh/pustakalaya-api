@@ -1,6 +1,8 @@
 class Book < Item
   before_create :set_params
 
+  has_one :publish_detail, foreign_key: :item_id
+
   private
 
   def set_params
