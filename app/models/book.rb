@@ -3,6 +3,8 @@ class Book < Item
 
   has_one :publish_detail, foreign_key: :item_id
 
+  validates :publish_detail, presence: true
+
   private
 
   def set_params
