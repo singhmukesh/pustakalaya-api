@@ -3,6 +3,7 @@ class V1::ApplicationController < ActionController::API
 
   rescue_from CustomException::Unauthorized, with: :unauthorized
   rescue_from CustomException::RequestTimeOut, with: :request_timeout
+  rescue_from CustomException::DomainConflict, with: :domain_conflict
 
   # Authenticate user from the auth token provided in the header of request and
   #   Instance variable @current_user to access the Authenticate user
@@ -33,5 +34,9 @@ class V1::ApplicationController < ActionController::API
 
   def request_time_out(error)
     render json: {message: error.message}, status: :request_timeout
+  end
+
+  def domain_conflict(error)
+    render json: {message: error.message}, status: :conflict
   end
 end

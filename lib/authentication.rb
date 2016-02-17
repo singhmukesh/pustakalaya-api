@@ -46,7 +46,7 @@ module Authentication
     # @params auth [HTTParty::Response], Hash containing response of Google Oauth validation
     def authenticate_domain(auth)
       unless auth['hd'] == ENV['AUTH_DOMAIN']
-        raise CustomException::Unauthorized
+        raise CustomException::DomainConflict
       end
     end
 
