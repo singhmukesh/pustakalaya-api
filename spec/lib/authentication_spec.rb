@@ -5,9 +5,8 @@ RSpec.describe Authentication, type: :lib do
 
   describe '#authenticate_with_oauth' do
     context 'when the auth token is invalid' do
-      it 'should have response with status code 401' do
-        response = Authentication::authenticate_with_oauth(Faker::Lorem.characters)
-        expect(response.code).to eq 401
+      it 'should raise exception CustomException::Unauthorized' do
+        expect { Authentication::authenticate_with_oauth(Faker::Lorem.characters) }.to raise_exception CustomException::Unauthorized
       end
     end
   end

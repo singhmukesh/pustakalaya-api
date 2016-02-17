@@ -28,15 +28,17 @@ module Authentication
     #     "message"=>"Invalid Credentials"}}
     def authenticate_with_oauth(token)
       begin
-        # Todo User latest oauth2 v3
+        # Todo Use latest oauth2 v3
         # HTTParty.get("https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=#{token}")
-        HTTParty.get("https://www.googleapis.com/oauth2/v2/userinfo",
+        response = HTTParty.get("https://www.googleapis.com/oauth2/v2/userinfo",
         headers: {
         'Authorization' => "OAuth #{token}"
         })
       rescue
         raise CustomException::RequestTimeOut
       end
+
+      raise CustomException::Unauthorized unless response.code == 200
     end
 
     # Validate the domain of the Gmail account

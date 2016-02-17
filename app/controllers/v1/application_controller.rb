@@ -13,7 +13,6 @@ class V1::ApplicationController < ActionController::API
   def authenticate_user!
     token = request.headers['Authorization']
     auth = Authentication::authenticate_with_oauth(token)
-    raise CustomException::Unauthorized unless auth.code === 200
 
     Authentication::authenticate_domain(auth) if ENV['AUTH_DOMAIN']
     @current_user = Authentication::find_user(auth)
