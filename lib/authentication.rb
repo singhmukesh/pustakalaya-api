@@ -38,7 +38,7 @@ module Authentication
         raise CustomException::RequestTimeOut
       end
 
-      raise CustomException::Unauthorized unless response.code == 200
+      raise CustomException::Unauthorized unless response.code == Constant::OK
     end
 
     # Validate the domain of the Gmail account
