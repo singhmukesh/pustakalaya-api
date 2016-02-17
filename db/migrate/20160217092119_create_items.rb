@@ -7,10 +7,10 @@ class CreateItems < ActiveRecord::Migration[5.0]
       t.text :description,      null: false
       t.string :image,          null: false
       t.integer :status,        null: false, default: 0
-      t.integer :is_readable,   null: false
-      t.integer :is_leaseable,  null: false
-      t.integer :is_rateable,   null: false
-      t.integer :is_reviewable, null: false
+      t.boolean :is_readable
+      t.boolean :is_leaseable
+      t.boolean :is_rateable
+      t.boolean :is_reviewable
       t.string :type,           null: false
 
       t.timestamps

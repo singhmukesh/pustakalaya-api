@@ -20,10 +20,10 @@ ActiveRecord::Schema.define(version: 20160217092119) do
     t.text     "description",   limit: 65535,             null: false
     t.string   "image",                                   null: false
     t.integer  "status",                      default: 0, null: false
-    t.integer  "is_readable",                             null: false
-    t.integer  "is_leaseable",                            null: false
-    t.integer  "is_rateable",                             null: false
-    t.integer  "is_reviewable",                           null: false
+    t.boolean  "is_readable"
+    t.boolean  "is_leaseable"
+    t.boolean  "is_rateable"
+    t.boolean  "is_reviewable"
     t.string   "type",                                    null: false
     t.datetime "created_at",                              null: false
     t.datetime "updated_at",                              null: false
