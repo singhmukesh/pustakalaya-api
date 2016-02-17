@@ -6,7 +6,6 @@ RSpec.describe Item, type: :model do
   describe 'presence' do
     it { is_expected.to validate_presence_of :name }
     it { is_expected.to validate_presence_of :code }
-    it { is_expected.to validate_presence_of :quantity }
     it { is_expected.to validate_presence_of :description }
     it { is_expected.to validate_presence_of :image }
   end
