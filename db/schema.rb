@@ -33,7 +33,7 @@ ActiveRecord::Schema.define(version: 20160217105100) do
     t.integer  "isbn",         null: false
     t.string   "author",       null: false
     t.date     "publish_date", null: false
-    t.integer  "item_id",      null: false
+    t.integer  "item_id"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
     t.index ["item_id"], name: "index_publish_details_on_item_id", using: :btree

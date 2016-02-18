@@ -5,6 +5,8 @@ class Kindle < Item
 
   validates :publish_detail, presence: true
 
+  accepts_nested_attributes_for :publish_detail
+
   private
 
   def set_params
