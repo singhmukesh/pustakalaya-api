@@ -11,13 +11,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160218051324) do
+ActiveRecord::Schema.define(version: 20160218074830) do
 
   create_table "categories", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "title",      null: false
     t.integer  "group",      null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "categories_items", id: false, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer "item_id",     null: false
+    t.integer "category_id", null: false
   end
 
   create_table "items", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -40,9 +45,9 @@ ActiveRecord::Schema.define(version: 20160218051324) do
     t.integer  "isbn",         null: false
     t.string   "author",       null: false
     t.date     "publish_date", null: false
-    t.integer  "item_id"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
+    t.integer  "item_id"
     t.index ["item_id"], name: "index_publish_details_on_item_id", using: :btree
   end
 
