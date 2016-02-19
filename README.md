@@ -1,24 +1,12 @@
-## README
+## PUSTAKALAYA API
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+[![Code Climate](https://codeclimate.com/repos/56c439dc04f7d01b7d006063/badges/1f242230464e6cdefe46/gpa.svg)](https://codeclimate.com/repos/56c439dc04f7d01b7d006063/feed)
 
-Things you may want to cover:
+[![Test Coverage](https://codeclimate.com/repos/56c439dc04f7d01b7d006063/badges/1f242230464e6cdefe46/coverage.svg)](https://codeclimate.com/repos/56c439dc04f7d01b7d006063/coverage)
 
-* Ruby version
+[![Issue Count](https://codeclimate.com/repos/56c439dc04f7d01b7d006063/badges/1f242230464e6cdefe46/issue_count.svg)](https://codeclimate.com/repos/56c439dc04f7d01b7d006063/feed)
 
-* System dependencies
+[![Build Status](https://travis-ci.org/leapfrogtechnology/pustakalaya-api.svg?branch=develop)](https://travis-ci.org/leapfrogtechnology/pustakalaya-api)
 
-* Configuration
+[![Circle CI](https://circleci.com/gh/leapfrogtechnology/pustakalaya-api.svg?style=svg)](https://circleci.com/gh/leapfrogtechnology/pustakalaya-api)
 
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
