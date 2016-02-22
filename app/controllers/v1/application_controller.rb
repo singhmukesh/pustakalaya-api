@@ -1,9 +1,12 @@
-class V1::ApplicationController < ActionController::API
+class V1::ApplicationController < ActionController::Base
+  include Pundit
   before_action :authenticate_user!
 
   rescue_from CustomException::Unauthorized, with: :unauthorized
   rescue_from CustomException::RequestTimeOut, with: :request_timeout
   rescue_from CustomException::DomainConflict, with: :domain_conflict
+  rescue_from ActiveRecord::RecordInvalid, with: :record_invalid
+  rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
 
   # Authenticate user from the auth token provided in the header of request and
   #   Instance variable @current_user to access the Authenticate user
@@ -38,5 +41,13 @@ class V1::ApplicationController < ActionController::API
 
   def domain_conflict(error)
     render json: {message: error.message}, status: :conflict
+  end
+
+  def record_invalid(error)
+    render json: {message: error.message}, status: :unprocessable_entity
+  end
+
+  def user_not_authorized
+    render json: {message: I18n.t('exception.unauthorized')}, status: :unauthorized
   end
 end
