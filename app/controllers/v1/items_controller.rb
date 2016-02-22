@@ -1,8 +1,8 @@
 class V1::ItemsController < V1::ApplicationController
 
   def create
+    authorize Item
     @item = Item.new(item_params)
-    authorize Item.new
     @item.save!
   end
 
