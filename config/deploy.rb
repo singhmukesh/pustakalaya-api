@@ -2,7 +2,7 @@
 set :rvm_ruby_version, 'ruby-2.3.0'
 
 #Application name
-set :application, 'Pustakalaya API'
+set :application, 'PustakalayaAPI'
 
 # Source code management. Default value for :scm is :git
 set :scm, :git
