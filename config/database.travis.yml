@@ -1,0 +1,6 @@
+# config/database.travis.yml
+test:
+  adapter: mysql2
+  database: pustakalaya_test
+  username: travis
+  encoding: utf8

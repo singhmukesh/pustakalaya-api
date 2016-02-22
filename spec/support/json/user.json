@@ -1,0 +1,13 @@
+{
+  "id": "5587866",
+  "email": "user@example.com",
+  "verified_email": true,
+  "name": "Ram Bahadur",
+  "given_name": "Ram",
+  "family_name": "Bahadur",
+  "link": "https://plus.google.com/5587866",
+  "picture": "https://lh3.googleusercontent.com/photo.jpg",
+  "gender": "male",
+  "locale": "en",
+  "hd": "example.com"
+}

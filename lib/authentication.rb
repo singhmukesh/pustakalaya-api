@@ -48,6 +48,7 @@ module Authentication
       unless auth['hd'] == ENV['AUTH_DOMAIN']
         raise CustomException::DomainConflict
       end
+      true
     end
   end
 end
