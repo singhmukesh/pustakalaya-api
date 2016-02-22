@@ -39,6 +39,7 @@ module Authentication
       end
 
       raise CustomException::Unauthorized unless response.code == Constant::OK
+      response
     end
 
     # Validate the domain of the Gmail account
