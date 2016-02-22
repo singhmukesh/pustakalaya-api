@@ -11,6 +11,7 @@ require 'rspec/rails'
 require 'shoulda/matchers'
 require 'factory_girl_rails'
 require 'codeclimate-test-reporter'
+require 'pundit/rspec'
 
 if ENV['CIRCLE_ARTIFACTS']
   dir = File.join('..', '..', '..', ENV['CIRCLE_ARTIFACTS'], 'coverage')

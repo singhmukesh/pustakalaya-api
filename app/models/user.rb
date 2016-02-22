@@ -11,13 +11,14 @@ class User < ApplicationRecord
     #
     # @return [User::ActiveRecord_Relation], Active Record Object containing the user details
     def find_user(auth)
-      user = User.find_by(uid: auth[:id])
+      user = User.find_by(uid: auth['id'])
       unless user
-        User.create(name: auth['name'],
+        user = User.create(name: auth['name'],
         email: auth['email'],
         image: auth['picture'],
         uid: auth['id'])
       end
+      user
     end
   end
 end

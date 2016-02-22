@@ -20,7 +20,7 @@ gem 'httparty', '~> 0.13.7'
 # Validation of dates, times and datetimes
 gem 'validates_timeliness', '~> 4.0.2'
 # Library with a simple, robust and scaleable authorization system
-gem 'pundit'
+gem 'pundit', '~> 1.0.1'
 
 group :development, :test do
   # Call 'binding.pry' anywhere in the code to stop execution and get a debugger console
