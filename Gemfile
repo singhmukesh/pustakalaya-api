@@ -21,6 +21,10 @@ gem 'httparty', '~> 0.13.7'
 gem 'validates_timeliness', '~> 4.0.2'
 # Library with a simple, robust and scaleable authorization system
 gem 'pundit', '~> 1.0.1'
+# A metasearch
+gem 'ransack', '~> 1.7.0'
+# Pagination library
+gem 'will_paginate', '~> 3.1.0'
 
 group :development, :test do
   # Call 'binding.pry' anywhere in the code to stop execution and get a debugger console

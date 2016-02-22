@@ -29,5 +29,9 @@ module PustakalayaApi
 
     # config for auto load path
     config.autoload_paths << Rails.root.join('lib')
+
+    # set per_page globally
+    DEFAULT_PER_PAGE = 10
+    WillPaginate.per_page = DEFAULT_PER_PAGE
   end
 end
