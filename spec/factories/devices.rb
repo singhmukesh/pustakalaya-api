@@ -5,6 +5,7 @@ FactoryGirl.define do
     quantity { Faker::Number.between(1, 10) }
     description { Faker::Lorem.paragraph }
     image { Faker::Avatar.image }
+    type 'Device'
   end
 
 end

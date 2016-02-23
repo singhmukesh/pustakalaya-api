@@ -4,6 +4,7 @@ FactoryGirl.define do
     code { Faker::Lorem.characters(10) }
     description { Faker::Lorem.paragraph }
     image { Faker::Avatar.image }
+    type 'Kindle'
   end
 
 end
