@@ -6,6 +6,12 @@ FactoryGirl.define do
     description { Faker::Lorem.paragraph }
     image { Faker::Avatar.image }
     type 'Device'
+    after(:build) do |device|
+      device.categories << FactoryGirl.build(:category, :group_device)
+    end
+    after(:create) do |device|
+      device.categories.each { |category| category.save! }
+    end
   end
 
 end
