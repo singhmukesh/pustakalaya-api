@@ -54,6 +54,8 @@ group :test do
   gem 'codeclimate-test-reporter', '~> 0.4.8'
   # Provides Test::Unit and RSpec-compatible one-liners that test common Rails functinality.
   gem 'shoulda-matchers', '~> 3.1.1'
+  # Provides a unified method to mock Time.now, Date.today, and DateTime.now
+  gem 'timecop', '~> 0.8.0'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
