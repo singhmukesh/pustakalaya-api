@@ -31,7 +31,7 @@ set :deploy_via, :remote_cache
 #Set staging as default environment
 #cap deploy => staging
 #cap production deploy => production
-set :default_stage, 'staging'
+set :default_stage, "staging"
 
 # Default value for :linked_files is []
 set :linked_files, %w{config/database.yml config/application.yml}
@@ -100,7 +100,7 @@ namespace :setup do
     end
   end
 
-  if fetch(:initial) == "true"
+  if fetch(:initial) == 'true'
     before 'deploy:migrate', 'setup:db_create'
     after 'deploy:migrate', 'setup:db_seed'
   end
