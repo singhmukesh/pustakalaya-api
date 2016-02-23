@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :category do
-    title { Faker::Lorem.word }
+    title { Faker::Lorem.characters }
   end
 
   trait :group_book do

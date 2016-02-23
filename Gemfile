@@ -45,6 +45,7 @@ group :development, :test do
   gem 'faker', '~> 1.5.0'
   # For Test Driven Development
   gem 'rspec-rails', '~> 3.1.0'
+  gem 'rails-controller-testing'
   # Feeding test data to the test suite.
   gem 'factory_girl_rails', '~> 4.5.0'
 end

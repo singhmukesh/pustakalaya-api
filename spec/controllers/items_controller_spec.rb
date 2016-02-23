@@ -7,11 +7,11 @@ require 'rails_helper'
 
 RSpec.describe V1::ItemsController, type: :controller do
 
-  let!(:user) { FactoryGirl.create(:user, :role_user) }
-  let!(:admin) { FactoryGirl.create(:user, :role_admin) }
-  let! (:category1) { FactoryGirl.create(:category) }
+  let(:user) { FactoryGirl.create(:user, :role_user) }
+  let(:admin) { FactoryGirl.create(:user, :role_admin) }
+  let(:category) { FactoryGirl.create(:category, :group_book) }
 
-  before { controller.stub(:authenticate_user!) }
+  before { allow(controller).to receive(:authenticate_user!) }
 
   describe '#create' do
     context 'when the user is not admin' do
@@ -31,7 +31,7 @@ RSpec.describe V1::ItemsController, type: :controller do
         controller.instance_variable_set(:@current_user, admin)
         @book_count = Book.count
 
-        post :create, params: {item: FactoryGirl.attributes_for(:book, category_ids: [category1.id], publish_detail_attributes: FactoryGirl.attributes_for(:publish_detail))}
+        post :create, params: {item: FactoryGirl.attributes_for(:book, category_ids: [category.id], publish_detail_attributes: FactoryGirl.attributes_for(:publish_detail))}
       end
 
       it 'should respond with status ok' do
