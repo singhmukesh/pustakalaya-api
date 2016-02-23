@@ -52,6 +52,6 @@ class V1::ApplicationController < ActionController::Base
   end
 
   def user_not_authorized
-    render json: {message: I18n.t('exception.action_not_permitted')}, status: :unauthorized
+    render json: {message: I18n.t('exception.not_permitted')}, status: :unauthorized
   end
 end
