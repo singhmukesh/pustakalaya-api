@@ -9,6 +9,6 @@ RSpec.describe Category, type: :model do
   end
 
   describe 'uniqueness' do
-    it { is_expected.to validate_uniqueness_of(:title).case_insensitive.scoped_to(:group) }
+    it { is_expected.to validate_uniqueness_of(:title).case_insensitive }
   end
 end
