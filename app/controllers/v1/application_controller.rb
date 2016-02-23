@@ -1,6 +1,6 @@
 class V1::ApplicationController < ActionController::Base
   include Pundit
-  before_action :authenticate_user!
+  # before_action :authenticate_user!
 
   rescue_from CustomException::Unauthorized, with: :unauthorized
   rescue_from CustomException::RequestTimeOut, with: :request_timeout
@@ -30,6 +30,10 @@ class V1::ApplicationController < ActionController::Base
   end
 
   private
+
+  def paginate(collections)
+    collections.result.paginate(page: params[:page], per_page: params[:per_page]).order('created_at DESC')
+  end
 
   def unauthorized(error)
     render json: {message: error.message}, status: :unauthorized
