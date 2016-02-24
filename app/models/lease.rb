@@ -4,7 +4,7 @@ class Lease < ApplicationRecord
   belongs_to :user
   belongs_to :item
 
-  validates_presence_of :issue_date, :due_date, on: :create, if: :device?
+  validates_presence_of :issue_date, :due_date, if: :device?
   validates_absence_of :issue_date, :due_date, on: :update
   validates_absence_of :return_date, on: :create
   validates_numericality_of :renew_count, less_than_or_equal_to: ENV['MAX_TIME_FOR_RENEW'].to_i
