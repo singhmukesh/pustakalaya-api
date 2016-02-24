@@ -8,7 +8,7 @@ RSpec.describe Lease, type: :model do
   subject { FactoryGirl.create(:lease) }
 
   describe 'presence' do
-    it { expect(FactoryGirl.build(:lease)).to validate_presence_of(:issue_date).on(:create) }
+    it { is_expected.to validate_presence_of(:issue_date).on(:create) }
     it { is_expected.to validate_presence_of(:due_date).on(:create) }
     it { is_expected.to validate_absence_of(:return_date).on(:create) }
     it { is_expected.to validate_absence_of(:issue_date).on(:update) }
@@ -58,10 +58,8 @@ RSpec.describe Lease, type: :model do
 
     context 'when item is device' do
       context 'when due date is past date compared to issue date' do
-        it 'should be invalid' do
-          lease = FactoryGirl.build(:lease, issue_date: Time.current + 2.hours, due_date: Time.current + 1.hours, item_id: FactoryGirl.create(:device).id)
-          lease.valid?
-          expect(lease.errors[:due_date][0]).to eq(I18n.t('validation.invalid_date'))
+        it 'should be raise exception CustomException::ItemUnavailable' do
+          expect { FactoryGirl.create(:lease, issue_date: Time.current + 2.hours, due_date: Time.current + 1.hours, item_id: FactoryGirl.create(:device).id) }.to raise_exception CustomException::ItemUnavailable
         end
       end
 
@@ -94,6 +92,28 @@ RSpec.describe Lease, type: :model do
         lease.valid?
         expect(lease.errors[:due_date].size).to eq(1)
       end
+    end
+  end
+
+  context 'when book lease request for not available book' do
+    it 'should be raise exception CustomException::ItemUnavailable' do
+      number_of_book = 2
+      book = FactoryGirl.create(:book, quantity: number_of_book)
+      FactoryGirl.create_list(:lease, number_of_book, item_id: book.id)
+
+      expect { FactoryGirl.create(:lease, item_id: book.id) }.to raise_exception CustomException::ItemUnavailable
+    end
+  end
+
+  context 'when book lease request for not available book' do
+    it 'should be raise exception CustomException::ItemUnavailable' do
+      number_of_device = 2
+      issue_date = Time.current + 2.hours
+      due_date = Time.current + 3.hours
+      device = FactoryGirl.create(:device, quantity: number_of_device)
+      FactoryGirl.create_list(:lease, number_of_device, item_id: device.id, issue_date: issue_date, due_date: due_date)
+
+      expect { FactoryGirl.create(:lease, item_id: device.id, issue_date: issue_date, due_date: due_date) }.to raise_exception CustomException::ItemUnavailable
     end
   end
 

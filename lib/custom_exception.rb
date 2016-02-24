@@ -17,4 +17,10 @@ module CustomException
       I18n.t('exception.domain_conflict')
     end
   end
+
+  class ItemUnavailable < StandardError
+    def message
+      I18n.t('exception.item_unavailable')
+    end
+  end
 end
