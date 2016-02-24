@@ -1,4 +1,7 @@
 class Lease < ApplicationRecord
+  before_create :set_dates, if: :book?
+  before_create :set_user
+
   belongs_to :user
   belongs_to :item
 
@@ -42,5 +45,15 @@ class Lease < ApplicationRecord
 
   def device?
     self.item.type == :Device.to_s
+  end
+
+  def set_dates
+    self.issue_date = Date.current
+    self.due_date = Date.current + EMV['BOOK_LEASE_DAYS'].to_i.days
+    self.return_date = nil
+  end
+
+  def set_user
+    self.user_id = current_user.id
   end
 end
