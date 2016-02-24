@@ -8,6 +8,10 @@ class Book < Item
 
   accepts_nested_attributes_for :publish_detail
 
+  def available?
+    self.leases.ACTIVE.count < self.quantity
+  end
+
   private
 
   def set_params
