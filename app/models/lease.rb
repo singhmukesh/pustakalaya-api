@@ -1,11 +1,10 @@
 class Lease < ApplicationRecord
   before_create :set_dates, if: :book?
-  before_create :set_user
 
   belongs_to :user
   belongs_to :item
 
-  validates_presence_of :issue_date, :due_date, on: :create
+  validates_presence_of :issue_date, :due_date, on: :create, if: :device?
   validates_absence_of :issue_date, :due_date, on: :update
   validates_absence_of :return_date, on: :create
   validates_numericality_of :renew_count, less_than_or_equal_to: ENV['MAX_TIME_FOR_RENEW'].to_i
@@ -13,8 +12,8 @@ class Lease < ApplicationRecord
   validate :book_available, on: :create, if: :book?
   validate :device_available, on: :create, if: :device?
 
-  validates_datetime :issue_date, on_or_after: lambda { Time.current }
-  validates_datetime :due_date, after: lambda { Time.current }
+  validates_datetime :issue_date, on_or_after: lambda { Time.current }, if: :device?
+  validates_datetime :due_date, after: lambda { Time.current }, if: :device?
   validates_datetime :return_date, on_or_before: lambda { Time.current }, allow_nil: true
 
   enum status: [:ACTIVE, :INACTIVE, :EXTENDED]
@@ -49,11 +48,7 @@ class Lease < ApplicationRecord
 
   def set_dates
     self.issue_date = Date.current
-    self.due_date = Date.current + EMV['BOOK_LEASE_DAYS'].to_i.days
+    self.due_date = Date.current + ENV['BOOK_LEASE_DAYS'].to_i.days
     self.return_date = nil
-  end
-
-  def set_user
-    self.user_id = current_user.id
   end
 end
