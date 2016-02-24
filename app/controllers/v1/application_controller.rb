@@ -1,6 +1,6 @@
 class V1::ApplicationController < ActionController::Base
   include Pundit
-  # before_action :authenticate_user!
+  before_action :authenticate_user!
 
   rescue_from CustomException::Unauthorized, with: :unauthorized
   rescue_from CustomException::RequestTimeOut, with: :request_timeout
