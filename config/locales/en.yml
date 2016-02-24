@@ -24,3 +24,4 @@ en:
     unauthorized: Unauthorized request
     request_time_out: Request time out
     domain_conflict: Domain conflict
+    not_permitted: Not permitted

@@ -3,6 +3,6 @@ class Category < ApplicationRecord
 
   enum group: [:BOOK, :DEVICE]
 
-  validates :title, presence: true, uniqueness: { case_sensitive: false, scope: :group }
+  validates :title, presence: true, uniqueness: {case_sensitive: false}
   validates :group, presence: true
 end
