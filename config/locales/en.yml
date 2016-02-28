@@ -28,3 +28,6 @@ en:
     item_unavailable: Item unavailable
   validation:
     invalid_date: Invalid date
+  user_mailer:
+    lease_success:
+      subject: You lease successful.

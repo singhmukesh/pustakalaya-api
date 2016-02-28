@@ -1,14 +1,14 @@
 class UserMailer < ApplicationMailer
 
-  # Send reset password mail to Admin when admin is created
+  # Send notification email when an item is successfully leased
   #
-  # @params admin_id [Admin::ActiveRecord_Relation id attribute]
-  def password_change(id)
-    @user = User.find(id)
-    @heading = t('user_mailer.password_change.subject')
+  # @params user_id [User::ActiveRecord_Relation id attribute], user id who successfully leased item
+  # @params item_id [Item::ActiveRecord_Relation id attribute], item id which is being leased
+  def lease_success(lease_id)
+    @lease = Lease.find(lease_id)
+    @user = @lease.user
+    @item = @lease.item
 
-    attachments.inline['logo.png'] = File.read("#{Rails.root}/app/assets/images/vayooex-logo.png")
-
-    mail(from: ENV['MAILER_EMAIL'], to: @user.email, subject: t('user_mailer.password_change.subject'))
+    mail(from: ENV['MAILER_EMAIL'], to: @user.email, subject: t('user_mailer.lease_success.subject'))
   end
 end

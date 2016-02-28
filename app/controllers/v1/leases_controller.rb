@@ -1,4 +1,5 @@
 class V1::LeasesController < V1::ApplicationController
+  after_action :lease_notification, only: :create
   rescue_from CustomException::ItemUnavailable, with: :item_unavailable
 
   def create
@@ -14,5 +15,9 @@ class V1::LeasesController < V1::ApplicationController
 
   def item_unavailable(error)
     render json: {message: error.message}, status: :conflict
+  end
+
+  def lease_notification
+    UserMailer.delay(queue: "mailer_#{Rails.env}").lease_success(@lease.id)
   end
 end

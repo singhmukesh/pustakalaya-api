@@ -1,0 +1,13 @@
+<p>You have successfully borrowed the <%= "#{@item.type.downcase} \"#{@item.name}\"" %>.</p>
+
+<p>Please note the following dates.</p>
+<table>
+  <tr>
+    <td>Issue Date:</td>
+    <td><%= @lease.issue_date.strftime('%A, %d %B %Y, %I:%M%p') %></td>
+  </tr>
+  <tr>
+    <td>Due Date:</td>
+    <td><%= @lease.due_date.strftime('%A, %d %B %Y, %I:%M%p') %></td>
+  </tr>
+</table>

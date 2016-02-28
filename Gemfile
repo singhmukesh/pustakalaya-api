@@ -40,6 +40,8 @@ group :development do
   gem 'capistrano-rails', '~> 1.1.3'
   gem 'capistrano-rvm', '~> 0.1.2'
   gem 'capistrano-bundler', '~> 1.1.4'
+  # Preview mail in the browser instead of sending
+  gem 'letter_opener', '~> 1.4.1'
 end
 
 group :development, :test do
