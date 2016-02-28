@@ -3,8 +3,8 @@ require 'rails_helper'
 RSpec.describe UserMailer, type: :mailer do
   let!(:lease) { FactoryGirl.create(:lease) }
 
-  describe '#password_change' do
-    let(:mail) { UserMailer.lease_success(lease.id).deliver_now }
+  describe '#lease_success' do
+    let(:mail) { UserMailer.lease_success(lease.id) }
 
     before do
       ActionMailer::Base.delivery_method = :test
@@ -17,7 +17,7 @@ RSpec.describe UserMailer, type: :mailer do
     end
 
     it 'renders the sender email' do
-      expect(mail.from).to eql(ENV['MAILER_EMAIL'].scan( /<([^>]*)>/).first)
+      expect(mail.from).to eql(ENV['MAILER_EMAIL'].scan(/<([^>]*)>/).first)
     end
 
     it 'delay the mails sending process' do
