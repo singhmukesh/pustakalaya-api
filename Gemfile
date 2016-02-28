@@ -25,6 +25,8 @@ gem 'pundit', '~> 1.0.1'
 gem 'ransack', '~> 1.7.0'
 # Pagination library
 gem 'will_paginate', '~> 3.1.0'
+# Simple, efficient background processing
+gem 'sidekiq', '~> 4.1.0'
 
 group :development, :test do
   # Call 'binding.pry' anywhere in the code to stop execution and get a debugger console
