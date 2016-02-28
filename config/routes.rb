@@ -3,6 +3,10 @@ Rails.application.routes.draw do
   namespace :v1, defaults: {format: :json} do
     resources :items, only: [:create]
     resources :books, only: [:index]
-    resources :leases, only: [:create]
+    resources :leases, only: [:create] do
+      collection do
+        post 'return'
+      end
+    end
   end
 end

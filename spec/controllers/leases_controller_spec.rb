@@ -5,6 +5,7 @@ RSpec.describe V1::LeasesController, type: :controller do
   let(:device) { FactoryGirl.create(:device) }
 
   before do
+    Timecop.freeze
     allow(controller).to receive(:authenticate_user!)
     controller.instance_variable_set(:@current_user, user)
   end
@@ -41,6 +42,40 @@ RSpec.describe V1::LeasesController, type: :controller do
 
       it 'should not create new Lease' do
         expect(Lease.count).to eq @lease_count
+      end
+    end
+  end
+
+  describe '#return' do
+    context 'with valid attributes' do
+      before do
+        @lease = FactoryGirl.create(:lease, item_id: device.id, user_id: user.id)
+        post :return, params: { item_id: device.id }
+      end
+
+      it 'should respond with status ok' do
+        is_expected.to respond_with :ok
+      end
+
+      it 'should have current date time as return date' do
+        @lease.reload
+        expect(@lease.return_date.strftime('%A, %d %B %Y, %I:%M%p')).to eq Time.current.strftime('%A, %d %B %Y, %I:%M%p')
+      end
+
+      it 'should have status as INACTIVE' do
+        @lease.reload
+        expect(@lease.INACTIVE?).to be_truthy
+      end
+    end
+
+    context 'with invalid attributes' do
+      before do
+        @lease = FactoryGirl.create(:lease, item_id: device.id, user_id: FactoryGirl.create(:user).id)
+        post :return, params: { item_id: device.id }
+      end
+
+      it 'should respond with status unauthorized' do
+        is_expected.to respond_with :unauthorized
       end
     end
   end

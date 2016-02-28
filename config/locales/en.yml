@@ -31,4 +31,6 @@ en:
     already_leased: Already leased
   user_mailer:
     lease_success:
-      subject: You lease successful.
+      subject: Successfully leased.
+    return_success:
+      subject: Successfully returned.
