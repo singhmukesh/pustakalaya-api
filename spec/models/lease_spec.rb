@@ -7,8 +7,7 @@ RSpec.describe Lease, type: :model do
 
   subject { FactoryGirl.create(:lease) }
 
-  describe 'presence when lease device' do
-
+  describe 'presence' do
     it { is_expected.to validate_presence_of(:issue_date) }
     it { is_expected.to validate_presence_of(:due_date) }
     it { is_expected.to validate_absence_of(:return_date).on(:create) }
@@ -92,6 +91,20 @@ RSpec.describe Lease, type: :model do
       FactoryGirl.create_list(:lease, number_of_device, item_id: device.id, issue_date: issue_date, due_date: due_date)
 
       expect { FactoryGirl.create(:lease, item_id: device.id, issue_date: issue_date, due_date: due_date) }.to raise_exception CustomException::ItemUnavailable
+    end
+  end
+
+  context 'when item which has already been leased by ownself' do
+    before do
+      @device = FactoryGirl.create(:device)
+      @user = FactoryGirl.create(:user)
+      FactoryGirl.create(:lease, item_id: @device.id, user_id: @user.id)
+    end
+
+    it 'should be add validation error message to item_id' do
+      lease = FactoryGirl.build(:lease, item_id: @device.id, user_id: @user.id)
+      lease.valid?
+      expect(lease.errors[:item_id][0]).to eq I18n.t('validation.already_leased')
     end
   end
 

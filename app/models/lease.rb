@@ -8,6 +8,7 @@ class Lease < ApplicationRecord
   validates_absence_of :issue_date, :due_date, on: :update
   validates_absence_of :return_date, on: :create
   validates_numericality_of :renew_count, less_than_or_equal_to: ENV['MAX_TIME_FOR_RENEW'].to_i
+  validate :already_leased
   validate :validate_due_date, on: :create, if: :device?
   validate :book_available, on: :create, if: :book?
   validate :device_available, on: :create, if: :device?
@@ -19,6 +20,12 @@ class Lease < ApplicationRecord
   enum status: [:ACTIVE, :INACTIVE, :EXTENDED]
 
   private
+
+  def already_leased
+    unless Lease.ACTIVE.where(item_id: item_id, user_id: user_id).blank?
+      errors.add(:item_id, I18n.t('validation.already_leased'))
+    end
+  end
 
   def validate_due_date
     if (issue_date.beginning_of_day + ENV['MAX_DEVICE_LEASE_DAYS'].to_i.days) < due_date.beginning_of_day

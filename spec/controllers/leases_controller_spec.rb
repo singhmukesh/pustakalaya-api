@@ -35,7 +35,7 @@ RSpec.describe V1::LeasesController, type: :controller do
         post :create, params: {lease: FactoryGirl.attributes_for(:lease, issue_date: Time.current - 3.days, item_id: device.id)}
       end
 
-      it 'should respond with status ok' do
+      it 'should respond with status unprocessable_entity' do
         is_expected.to respond_with :unprocessable_entity
       end
 
