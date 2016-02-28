@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe V1::LeasesController, type: :controller do
-  let(:user) { FactoryGirl.create(:user, :role_user) }
+  let(:user) { FactoryGirl.create(:user) }
   let(:device) { FactoryGirl.create(:device) }
 
   before do

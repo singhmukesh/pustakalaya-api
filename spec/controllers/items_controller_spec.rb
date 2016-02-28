@@ -7,7 +7,7 @@ require 'rails_helper'
 
 RSpec.describe V1::ItemsController, type: :controller do
 
-  let(:user) { FactoryGirl.create(:user, :role_user) }
+  let(:user) { FactoryGirl.create(:user) }
   let(:admin) { FactoryGirl.create(:user, :role_admin) }
   let(:category) { FactoryGirl.create(:category, :group_book) }
 

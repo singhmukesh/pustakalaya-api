@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
-  subject { FactoryGirl.build(:user, :role_user) }
+  subject { FactoryGirl.build(:user) }
 
   user_detail = JSON.parse(File.read('spec/support/json/user.json'))
 

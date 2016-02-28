@@ -4,7 +4,7 @@ FactoryGirl.define do
     due_date { Time.current + 4.days }
     after(:build) do |lease|
       lease.item ||= FactoryGirl.build(:device)
-      lease.user ||= FactoryGirl.build(:user, :role_user)
+      lease.user ||= FactoryGirl.build(:user)
     end
     after(:create) do |lease|
       lease.item.save!
@@ -12,7 +12,7 @@ FactoryGirl.define do
     end
   end
 
-  trait :device_book do
+  trait :lease_book do
     after(:build) do |lease|
       lease.item = FactoryGirl.create(:book)
     end

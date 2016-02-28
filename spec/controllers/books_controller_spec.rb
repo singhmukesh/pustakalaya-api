@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe V1::BooksController, type: :controller do
-  let(:user) { FactoryGirl.create(:user, :role_user) }
+  let(:user) { FactoryGirl.create(:user) }
 
   before do
     FactoryGirl.create_list(:book, 12)
