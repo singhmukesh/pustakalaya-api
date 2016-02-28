@@ -5,6 +5,11 @@ class V1::WatchesController < V1::ApplicationController
     @watch.save!
   end
 
+  def unwatch
+    @watch = Watch.find_by(item_id: params[:item_id])
+    @watch.INACTIVE!
+  end
+
   private
 
   def watch_params

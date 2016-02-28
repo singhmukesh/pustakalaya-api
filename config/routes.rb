@@ -5,6 +5,10 @@ Rails.application.routes.draw do
     resources :items, only: [:create]
     resources :books, only: [:index]
     resources :leases, only: [:create]
-    resources :watches, only: [:create]
+    resources :watches, only: [:create] do
+      collection do
+        post :unwatch
+      end
+    end
   end
 end
