@@ -10,5 +10,10 @@ Rails.application.routes.draw do
         post :unwatch
       end
     end
+    resources :users, only: [] do
+      collection do
+        get :account
+      end
+    end
   end
 end
