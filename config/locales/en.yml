@@ -29,6 +29,8 @@ en:
   validation:
     invalid_date: Invalid date
     already_leased: Already leased
+    available_to_lease: Available to lease
+    already_watched: Already added to watchlist
   user_mailer:
     lease_success:
       subject: You lease successful.
