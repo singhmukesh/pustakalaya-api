@@ -9,7 +9,15 @@ class Book < Item
   accepts_nested_attributes_for :publish_detail
 
   def available?
-    self.leases.ACTIVE.count < self.quantity
+    self.ACTIVE? && (self.leases.ACTIVE.count < self.quantity)
+  end
+
+  def self.available
+    available = []
+    self.all.each do |book|
+      available << book.id if book.available?
+    end
+    where(id: available)
   end
 
   private
@@ -20,4 +28,5 @@ class Book < Item
     self.is_rateable = true
     self.is_reviewable = true
   end
+
 end
