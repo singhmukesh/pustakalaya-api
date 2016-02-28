@@ -1,7 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe Item, type: :model do
-  subject { FactoryGirl.build(:book) }
+
+  describe 'association' do
+    it { is_expected.to have_and_belong_to_many :categories }
+    it { is_expected.to have_many :leases }
+    it { is_expected.to have_many :watches }
+  end
 
   describe 'presence' do
     it { is_expected.to validate_presence_of :name }
@@ -11,6 +16,7 @@ RSpec.describe Item, type: :model do
   end
 
   describe 'uniqueness' do
-    it { is_expected.to validate_uniqueness_of(:code).case_insensitive }
+
+    it { expect(FactoryGirl.create(:book)).to validate_uniqueness_of(:code).case_insensitive }
   end
 end

@@ -5,6 +5,11 @@ RSpec.describe User, type: :model do
 
   user_detail = JSON.parse(File.read('spec/support/json/user.json'))
 
+  describe 'association' do
+    it { is_expected.to have_many :leases }
+    it { is_expected.to have_many :watches }
+  end
+
   describe 'presence' do
     it { is_expected.to validate_presence_of :role }
     it { is_expected.to validate_presence_of :name }
