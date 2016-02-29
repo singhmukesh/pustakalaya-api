@@ -32,7 +32,6 @@ en:
     available_to_lease: Available to lease
     already_watched: Already added to watchlist
   user_mailer:
-
     note_the_following_date: Please note the following dates.
     issue_date: Issue date
     due_date: Due date
@@ -43,3 +42,10 @@ en:
     return_success:
       message: You have successfully returned the %{item_type} '%{item_name}'.
       subject: Successfully returned.
+    watch:
+      message: You have successfully added '%{book_name}' to watchlist.
+      message_body: You will be receiving email notification when this book is leased and returned until you won't remove this book from your watchlist.
+      subject: Book added to watchlist
+    unwatch:
+      message: You have successfully remove '%{book_name}' from your watchlist.
+      subject: Book removed from watchlist
