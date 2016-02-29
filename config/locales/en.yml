@@ -32,5 +32,14 @@ en:
     available_to_lease: Available to lease
     already_watched: Already added to watchlist
   user_mailer:
+
+    note_the_following_date: Please note the following dates.
+    issue_date: Issue date
+    due_date: Due date
+    return_date: Return date
     lease_success:
-      subject: You lease successful.
+      message: You have successfully borrowed the %{item_type} '%{item_name}'.
+      subject: Successfully leased.
+    return_success:
+      message: You have successfully returned the %{item_type} '%{item_name}'.
+      subject: Successfully returned.
