@@ -1,11 +1,10 @@
-class V1::ApplicationController < ActionController::Base
+class ApplicationController < ActionController::Base
   include Pundit
   before_action :authenticate_user!
 
   rescue_from CustomException::Unauthorized, with: :unauthorized
   rescue_from CustomException::RequestTimeOut, with: :request_timeout
   rescue_from CustomException::DomainConflict, with: :domain_conflict
-  rescue_from ActiveRecord::RecordInvalid, with: :record_invalid
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
 
   # Authenticate user from the auth token provided in the header of request and
@@ -31,10 +30,6 @@ class V1::ApplicationController < ActionController::Base
 
   private
 
-  def paginate(collections)
-    collections.result.paginate(page: params[:page], per_page: params[:per_page]).order('created_at DESC')
-  end
-
   def unauthorized(error)
     render json: {message: error.message}, status: :unauthorized
   end
@@ -45,10 +40,6 @@ class V1::ApplicationController < ActionController::Base
 
   def domain_conflict(error)
     render json: {message: error.message}, status: :conflict
-  end
-
-  def record_invalid(error)
-    render json: {message: error.message}, status: :unprocessable_entity
   end
 
   def user_not_authorized
