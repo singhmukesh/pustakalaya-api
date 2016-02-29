@@ -1,6 +1,5 @@
 class V1::WatchesController < V1::ApplicationController
-  after_action :watch_notification, only: :create
-  after_action :unwatch_notification, only: :unwatch
+  after_action :notify
 
   def create
     @watch = current_user.watches.new(watch_params)
@@ -27,11 +26,7 @@ class V1::WatchesController < V1::ApplicationController
     params.require(:watch).permit(:id, :item_id)
   end
 
-  def watch_notification
-    UserMailer.delay(queue: "mailer_#{Rails.env}").watch(@watch.id)
-  end
-
-  def unwatch_notification
-    UserMailer.delay(queue: "mailer_#{Rails.env}").unwatch(@watch.id)
+  def notify
+    @watch.notify
   end
 end
