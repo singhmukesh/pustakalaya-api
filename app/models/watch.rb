@@ -4,7 +4,7 @@ class Watch < ApplicationRecord
 
   enum status: [:ACTIVE, :INACTIVE]
 
-  validate :watchable
+  validate :watchable, on: :create
 
   private
 
