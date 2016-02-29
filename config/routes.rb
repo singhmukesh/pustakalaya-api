@@ -1,8 +1,14 @@
 Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   namespace :v1, defaults: {format: :json} do
-    resources :items
-
-    resources :books
+    resources :items, only: [:create]
+    resources :books, only: [:index]
+    resources :leases, only: [:create]
   end
+
+  require 'sidekiq/web'
+  Sidekiq::Web.use Rack::Auth::Basic do |username, password|
+    username == ENV['SIDEKIQ_USERNAME'] && password == ENV['SIDEKIQ_PASSWORD']
+  end
+  mount Sidekiq::Web, at: "/sidekiq"
 end

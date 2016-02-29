@@ -5,7 +5,7 @@ FactoryGirl.define do
     quantity { Faker::Number.between(1, 10) }
     description { Faker::Lorem.paragraph }
     image { Faker::Avatar.image }
-    type 'Book'
+    type Book.to_s
     after(:build) do |book|
       book.publish_detail ||= FactoryGirl.build(:publish_detail)
       book.categories << FactoryGirl.build(:category, :group_book)

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160218074830) do
+ActiveRecord::Schema.define(version: 20160223094650) do
 
   create_table "categories", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "title",      null: false
@@ -41,6 +41,20 @@ ActiveRecord::Schema.define(version: 20160218074830) do
     t.datetime "updated_at",                              null: false
   end
 
+  create_table "leases", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.datetime "issue_date",              null: false
+    t.datetime "due_date",                null: false
+    t.datetime "return_date"
+    t.integer  "status",      default: 0, null: false
+    t.integer  "renew_count", default: 0, null: false
+    t.integer  "user_id"
+    t.integer  "item_id"
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+    t.index ["item_id"], name: "index_leases_on_item_id", using: :btree
+    t.index ["user_id"], name: "index_leases_on_user_id", using: :btree
+  end
+
   create_table "publish_details", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "isbn",         null: false
     t.string   "author",       null: false
@@ -61,5 +75,7 @@ ActiveRecord::Schema.define(version: 20160218074830) do
     t.datetime "updated_at",             null: false
   end
 
+  add_foreign_key "leases", "items"
+  add_foreign_key "leases", "users"
   add_foreign_key "publish_details", "items"
 end

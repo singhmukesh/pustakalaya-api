@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  has_many :leases
+
   enum role: [:USER, :ADMIN]
 
   validates :name, :email, :uid, :role, presence: true

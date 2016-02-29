@@ -25,6 +25,10 @@ gem 'pundit', '~> 1.0.1'
 gem 'ransack', '~> 1.7.0'
 # Pagination library
 gem 'will_paginate', '~> 3.1.0'
+# Simple, efficient background processing
+gem 'sidekiq', '~> 4.1.0'
+# Dependency for sidekiq
+gem 'sinatra', github: 'sinatra/sinatra', branch: 'master', require: nil
 
 group :development, :test do
   # Call 'binding.pry' anywhere in the code to stop execution and get a debugger console
@@ -38,6 +42,8 @@ group :development do
   gem 'capistrano-rails', '~> 1.1.3'
   gem 'capistrano-rvm', '~> 0.1.2'
   gem 'capistrano-bundler', '~> 1.1.4'
+  # Preview mail in the browser instead of sending
+  gem 'letter_opener', '~> 1.4.1'
 end
 
 group :development, :test do
@@ -59,6 +65,8 @@ group :test do
   gem 'codeclimate-test-reporter', '~> 0.4.8'
   # Provides Test::Unit and RSpec-compatible one-liners that test common Rails functinality.
   gem 'shoulda-matchers', '~> 3.1.1'
+  # Provides a unified method to mock Time.now, Date.today, and DateTime.now
+  gem 'timecop', '~> 0.8.0'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
