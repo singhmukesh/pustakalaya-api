@@ -36,6 +36,26 @@ class UserMailer < ApplicationMailer
     mail(from: ENV['MAILER_EMAIL'], to: @user.email, subject: t('user_mailer.unwatch.subject'))
   end
 
+  # Send notification email when an watched item is successfully leased
+  #
+  # @params lease_id [Lease::ActiveRecord_Relation id attribute]
+  def leased_watched_item(lease_id, watch_id)
+    @lease = Lease.find(lease_id)
+    set_watch(watch_id)
+
+    mail(from: ENV['MAILER_EMAIL'], to: @user.email, subject: t('user_mailer.leased_watched_item.subject'))
+  end
+
+  # Send notification email when an watched item is successfully leased
+  #
+  # @params lease_id [Lease::ActiveRecord_Relation id attribute]
+  def return_watched_item(lease_id, watch_id)
+    @lease = Lease.find(lease_id)
+    set_watch(watch_id)
+
+    mail(from: ENV['MAILER_EMAIL'], to: @user.email, subject: t('user_mailer.leased_watched_item.subject'))
+  end
+
   private
 
   def set_lease(id)

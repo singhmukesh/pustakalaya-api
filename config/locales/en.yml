@@ -49,3 +49,11 @@ en:
     unwatch:
       message: You have successfully remove '%{book_name}' from your watchlist.
       subject: Book removed from watchlist
+    leased_watched_item:
+      message: The book '%{book_name}' which you have added to watchlist have been leased.
+      message_body: Please find the details of leased below.
+      subject: Book leased
+    return_watched_item:
+      message: The book '%{book_name}' which you have added to watchlist have been return.
+      message_body: Please find the details of return below.
+      subject: Book leased
