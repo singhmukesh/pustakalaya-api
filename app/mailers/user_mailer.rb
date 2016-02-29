@@ -3,19 +3,19 @@ class UserMailer < ApplicationMailer
   # Send notification email when an item is successfully leased
   #
   # @params lease_id [Lease::ActiveRecord_Relation id attribute]
-  def lease_success(lease_id)
+  def lease(lease_id)
     set_lease(lease_id)
 
-    mail(from: ENV['MAILER_EMAIL'], to: @user.email, subject: t('user_mailer.lease_success.subject'))
+    mail(from: ENV['MAILER_EMAIL'], to: @user.email, subject: t('user_mailer.lease.subject'))
   end
 
   # Send notification email when an item is successfully returned
   #
   # @params lease_id [Lease::ActiveRecord_Relation id attribute]
-  def return_success(lease_id)
+  def return(lease_id)
     set_lease(lease_id)
 
-    mail(from: ENV['MAILER_EMAIL'], to: @user.email, subject: t('user_mailer.return_success.subject'))
+    mail(from: ENV['MAILER_EMAIL'], to: @user.email, subject: t('user_mailer.return.subject'))
   end
 
   # Send notification email when a Book is successfully added to watchlist

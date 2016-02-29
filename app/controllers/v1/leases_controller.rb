@@ -34,10 +34,10 @@ class V1::LeasesController < V1::ApplicationController
   end
 
   def lease_notification
-    UserMailer.delay(queue: "mailer_#{Rails.env}").lease_success(@lease.id)
+    UserMailer.delay(queue: "mailer_#{Rails.env}").lease(@lease.id)
   end
 
   def return_notification
-    UserMailer.delay(queue: "mailer_#{Rails.env}").return_success(@lease.id)
+    UserMailer.delay(queue: "mailer_#{Rails.env}").return(@lease.id)
   end
 end

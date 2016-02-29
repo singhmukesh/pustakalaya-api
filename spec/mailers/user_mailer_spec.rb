@@ -3,8 +3,8 @@ require 'rails_helper'
 RSpec.describe UserMailer, type: :mailer do
   let(:lease) { FactoryGirl.create(:lease) }
 
-  describe '#lease_success' do
-    let(:mail) { UserMailer.lease_success(lease.id) }
+  describe '#lease' do
+    let(:mail) { UserMailer.lease(lease.id) }
 
     before do
       ActionMailer::Base.delivery_method = :test
@@ -22,7 +22,7 @@ RSpec.describe UserMailer, type: :mailer do
 
     it 'delay the mails sending process' do
       expect {
-        UserMailer.delay.lease_success(lease.id)
+        UserMailer.delay.lease(lease.id)
       }.to change(Sidekiq::Extensions::DelayedMailer.jobs, :size).by(1)
     end
 
@@ -31,8 +31,8 @@ RSpec.describe UserMailer, type: :mailer do
     end
   end
 
-  describe '#return_success' do
-    let(:mail) { UserMailer.return_success(lease.id) }
+  describe '#return' do
+    let(:mail) { UserMailer.return(lease.id) }
 
     before do
       lease.update_attribute(:return_date, Time.current)
@@ -52,7 +52,7 @@ RSpec.describe UserMailer, type: :mailer do
 
     it 'delay the mails sending process' do
       expect {
-        UserMailer.delay.return_success(lease.id)
+        UserMailer.delay.return(lease.id)
       }.to change(Sidekiq::Extensions::DelayedMailer.jobs, :size).by(1)
     end
 

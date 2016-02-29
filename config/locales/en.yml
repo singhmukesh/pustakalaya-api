@@ -36,10 +36,10 @@ en:
     issue_date: Issue date
     due_date: Due date
     return_date: Return date
-    lease_success:
-      message: You have successfully borrowed the %{item_type} '%{item_name}'.
+    lease:
+      message: You have successfully leased the %{item_type} '%{item_name}'.
       subject: Successfully leased.
-    return_success:
+    return:
       message: You have successfully returned the %{item_type} '%{item_name}'.
       subject: Successfully returned.
     watch:
