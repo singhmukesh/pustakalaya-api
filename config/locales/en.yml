@@ -51,5 +51,5 @@ en:
       subject: Book removed from watchlist
     notification_to_watchers:
       subject: Nofication for book
-      message: The book '%{book_name}' which you have added to watchlist have been %{operation}.
+      message: The book '%{book_name}' which you have added to watchlist has been %{operation}.
       message_body: Please find the details below.
