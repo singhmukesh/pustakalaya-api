@@ -133,4 +133,18 @@ RSpec.describe Lease, type: :model do
       end
     end
   end
+
+  describe '#notify_to_watchers' do
+    before do
+      @number_of_watches = 4
+      item_quantity = 1
+      item = FactoryGirl.create(:book, quantity: item_quantity)
+      @leases = FactoryGirl.create_list(:lease, item_quantity, item_id: item.id)
+      FactoryGirl.create_list(:watch, @number_of_watches, item_id: item.id)
+    end
+
+    it 'should sends a book leased email' do
+      expect { @leases.first.notify_to_watchers }.to change { Sidekiq::Extensions::DelayedMailer.jobs.size }.by(@number_of_watches)
+    end
+  end
 end
