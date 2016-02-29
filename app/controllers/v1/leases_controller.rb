@@ -1,6 +1,7 @@
 class V1::LeasesController < V1::ApplicationController
-  after_action :lease_notification, :unwatch_book, :lease_notification_to_watchers, only: :create
-  after_action :return_notification, :return_notification_to_watchers, only: :return
+  after_action :lease_notification, :unwatch_book, only: :create
+  after_action :return_notification, only: :return
+  after_action :notification_to_watchers
   rescue_from CustomException::ItemUnavailable, with: :item_unavailable
 
   def create
@@ -52,18 +53,10 @@ class V1::LeasesController < V1::ApplicationController
     end
   end
 
-  def lease_notification_to_watchers
+  def notification_to_watchers
     if @lease.item.type == Book.to_s
       watches.each do |watch|
-        UserMailer.delay(queue: "mailer_#{Rails.env}").leased_watched_item(@lease.id, watch.id)
-      end
-    end
-  end
-
-  def return_notification_to_watchers
-    if @lease.item.type == Book.to_s
-      watches.each do |watch|
-        UserMailer.delay(queue: "mailer_#{Rails.env}").return_watched_item(@lease.id, watch.id)
+        UserMailer.delay(queue: "mailer_#{Rails.env}").notification_to_watchers(@lease.id, watch.id)
       end
     end
   end

@@ -1,0 +1,20 @@
+<% operation = @lease.return_date.nil? ? 'leased' : 'return' %>
+<p><%= t('user_mailer.notification_to_watchers.message', book_name: @book.name, operation: operation ) %></p>
+
+<p><%= t('user_mailer.notification_to_watchers.message_body') %></p>
+<table>
+  <tr>
+    <td><%= t('user_mailer.issue_date') %>:</td>
+    <td><%= @lease.issue_date.strftime('%A, %d %B %Y, %I:%M%p') %></td>
+  </tr>
+  <tr>
+    <td><%= t('user_mailer.due_date') %>:</td>
+    <td><%= @lease.due_date.strftime('%A, %d %B %Y, %I:%M%p') %></td>
+  </tr>
+  <% if @lease.return_date.present? %>
+    <tr>
+      <td><%= t('user_mailer.return_date') %>:</td>
+      <td><%= @lease.return_date.strftime('%A, %d %B %Y, %I:%M%p') %></td>
+    </tr>
+  <% end %>
+</table>
