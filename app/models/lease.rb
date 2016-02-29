@@ -18,6 +18,14 @@ class Lease < ApplicationRecord
 
   enum status: [:ACTIVE, :INACTIVE, :EXTENDED]
 
+  def notify
+    if self.ACTIVE?
+      UserMailer.delay(queue: "mailer_#{Rails.env}").lease(self.id)
+    else
+      UserMailer.delay(queue: "mailer_#{Rails.env}").return(self.id)
+    end
+  end
+
   private
 
   def already_leased

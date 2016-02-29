@@ -1,7 +1,6 @@
 class V1::LeasesController < V1::ApplicationController
-  after_action :lease_notification, :unwatch_book, only: :create
-  after_action :return_notification, only: :return
-  after_action :notification_to_watchers
+  after_action :notify, :notification_to_watchers
+  after_action :unwatch_book, only: :create
   rescue_from CustomException::ItemUnavailable, with: :item_unavailable
 
   def create
@@ -34,12 +33,8 @@ class V1::LeasesController < V1::ApplicationController
     render json: {message: error.message}, status: :conflict
   end
 
-  def lease_notification
-    UserMailer.delay(queue: "mailer_#{Rails.env}").lease(@lease.id)
-  end
-
-  def return_notification
-    UserMailer.delay(queue: "mailer_#{Rails.env}").return(@lease.id)
+  def notify
+    @lease.notify
   end
 
   def unwatch_book
