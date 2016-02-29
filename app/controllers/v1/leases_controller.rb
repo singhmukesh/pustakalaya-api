@@ -4,7 +4,7 @@ class V1::LeasesController < V1::ApplicationController
   rescue_from CustomException::ItemUnavailable, with: :item_unavailable
 
   def create
-    @lease = Lease.new(lease_params.merge!(user_id: current_user.id))
+    @lease = current_user.leases.new(lease_params)
     @lease.save!
   end
 

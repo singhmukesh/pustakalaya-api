@@ -10,6 +10,7 @@ RSpec.describe Lease, type: :model do
   describe 'presence' do
     it { is_expected.to validate_presence_of(:issue_date) }
     it { is_expected.to validate_presence_of(:due_date) }
+    it { is_expected.to validate_absence_of(:return_date).on(:create) }
     it { is_expected.to validate_numericality_of(:renew_count).is_less_than_or_equal_to(ENV['MAX_TIME_FOR_RENEW'].to_i) }
   end
 
