@@ -27,6 +27,8 @@ gem 'ransack', '~> 1.7.0'
 gem 'will_paginate', '~> 3.1.0'
 # Simple, efficient background processing
 gem 'sidekiq', '~> 4.1.0'
+# Dependency for sidekiq
+gem 'sinatra', github: 'sinatra/sinatra', branch: 'master', require: nil
 
 group :development, :test do
   # Call 'binding.pry' anywhere in the code to stop execution and get a debugger console
