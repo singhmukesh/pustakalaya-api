@@ -39,13 +39,10 @@ class V1::LeasesController < V1::ApplicationController
   end
 
   def unwatch_book
-    if @lease.item.type == Book.to_s
-      watch_on_lease_book = current_user.watches.ACTIVE.find_by(item_id: @lease.item.id)
+    item = @lease.item
 
-      if watch_on_lease_book.present?
-        watch_on_lease_book.INACTIVE!
-        UserMailer.delay(queue: "mailer_#{Rails.env}").unwatch(watch_on_lease_book.id)
-      end
+    if item.type == Book.to_s
+      item.unwatch(current_user.id)
     end
   end
 end
