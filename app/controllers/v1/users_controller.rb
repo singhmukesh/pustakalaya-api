@@ -1,5 +1,9 @@
 class V1::UsersController < V1::ApplicationController
 
+  def info
+    @user = current_user
+  end
+
   # @url v1/users/leases/
   # @action GET
   #

@@ -7,14 +7,28 @@ RSpec.describe V1::UsersController, type: :controller do
     allow(controller).to receive(:authenticate_user!)
     controller.instance_variable_set(:@current_user, user)
   end
-  
+
+  describe '#info' do
+    before do
+      get :info
+    end
+
+    it 'should respond with status ok' do
+      is_expected.to respond_with :ok
+    end
+
+    it 'should assign user to @user' do
+      expect(assigns(:user)).to eq user
+    end
+  end
+
   describe '#lease' do
     let!(:lease_device) { FactoryGirl.create(:lease, user: user) }
     let!(:lease_book) { FactoryGirl.create(:lease, :lease_book, user: user) }
 
     context "when params 'type' is undefined" do
       before do
-        post :leases
+        get :leases
       end
 
       it 'should respond with status ok' do
@@ -28,7 +42,7 @@ RSpec.describe V1::UsersController, type: :controller do
 
     context "when params 'type' value is 'book'" do
       before do
-        post :leases, params: {type: Book.to_s}
+        get :leases, params: {type: Book.to_s}
       end
 
       it 'should respond with status ok' do
@@ -42,7 +56,7 @@ RSpec.describe V1::UsersController, type: :controller do
 
     context "when params 'type' value is 'Device'" do
       before do
-        post :leases, params: {type: Device.to_s}
+        get :leases, params: {type: Device.to_s}
       end
 
       it 'should respond with status ok' do
@@ -67,7 +81,7 @@ RSpec.describe V1::UsersController, type: :controller do
       FactoryGirl.create_list(:lease, book2_quantity, item: book2)
       @watch2 = FactoryGirl.create(:watch, item: book2, user: user)
 
-      post :watches
+      get :watches
     end
 
     it 'should respond with status ok' do
