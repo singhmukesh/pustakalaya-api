@@ -52,29 +52,4 @@ RSpec.describe Watch, type: :model do
       end
     end
   end
-
-  describe '#notify' do
-    before do
-      book_quantity = 1
-      book = FactoryGirl.create(:book, quantity: book_quantity)
-      FactoryGirl.create_list(:lease, book_quantity, item_id: book.id)
-      @watch = FactoryGirl.create(:watch, item_id: book.id)
-    end
-
-    context 'when watch is active' do
-      it 'should sends a watch successfull email' do
-        expect { @watch.notify }.to change { Sidekiq::Extensions::DelayedMailer.jobs.size }.by(1)
-      end
-    end
-
-    context 'when watch is inactive' do
-      before do
-        @watch.INACTIVE!
-      end
-
-      it 'should sends a unwatch successfull email' do
-        expect { @watch.notify }.to change { Sidekiq::Extensions::DelayedMailer.jobs.size }.by(1)
-      end
-    end
-  end
 end
