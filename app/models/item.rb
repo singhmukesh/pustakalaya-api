@@ -6,7 +6,6 @@ class Item < ApplicationRecord
   validates :name, presence: true
   validates :code, presence: true, uniqueness: {case_sensitive: false}
   validates :description, :image, presence: true
-  # validates_inclusion_of :status, in: [0, 1]
 
   validates :categories, presence: true
 
