@@ -29,15 +29,27 @@ en:
   validation:
     invalid_date: Invalid date
     already_leased: Already leased
+    available_to_lease: Available to lease
+    already_watched: Already added to watchlist
   user_mailer:
-
     note_the_following_date: Please note the following dates.
     issue_date: Issue date
     due_date: Due date
     return_date: Return date
-    lease_success:
-      message: You have successfully borrowed the %{item_type} '%{item_name}'.
+    lease:
+      message: You have successfully leased the %{item_type} '%{item_name}'.
       subject: Successfully leased.
-    return_success:
+    return:
       message: You have successfully returned the %{item_type} '%{item_name}'.
       subject: Successfully returned.
+    watch:
+      message: You have successfully added '%{book_name}' to watchlist.
+      message_body: You will be receiving email notification when this book is leased and returned until you won't remove this book from your watchlist.
+      subject: Book added to watchlist
+    unwatch:
+      message: You have successfully remove '%{book_name}' from your watchlist.
+      subject: Book removed from watchlist
+    notification_to_watchers:
+      subject: Nofication for book
+      message: The book '%{book_name}' which you have added to watchlist has been %{operation}.
+      message_body: Please find the details below.

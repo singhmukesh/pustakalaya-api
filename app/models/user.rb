@@ -1,5 +1,6 @@
 class User < ApplicationRecord
   has_many :leases
+  has_many :watches
 
   enum role: [:USER, :ADMIN]
 

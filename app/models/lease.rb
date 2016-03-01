@@ -18,6 +18,24 @@ class Lease < ApplicationRecord
 
   enum status: [:ACTIVE, :INACTIVE, :EXTENDED]
 
+  # Notify user with email when item is leased or return
+  def notify
+    if self.ACTIVE?
+      UserMailer.delay(queue: "mailer_#{Rails.env}").lease(self.id)
+    else
+      UserMailer.delay(queue: "mailer_#{Rails.env}").return(self.id)
+    end
+  end
+
+  # Notify to Book watchers when the book is leased or return
+  def notify_to_watchers
+    if self.item.type == Book.to_s
+      self.item.watches.ACTIVE.each do |watch|
+        UserMailer.delay(queue: "mailer_#{Rails.env}").notification_to_watchers(self.id, watch.id)
+      end
+    end
+  end
+
   private
 
   def already_leased

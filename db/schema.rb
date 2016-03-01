@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160223094650) do
+ActiveRecord::Schema.define(version: 20160228102640) do
 
   create_table "categories", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "title",      null: false
@@ -75,7 +75,19 @@ ActiveRecord::Schema.define(version: 20160223094650) do
     t.datetime "updated_at",             null: false
   end
 
+  create_table "watches", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer  "status",     default: 0, null: false
+    t.integer  "item_id"
+    t.integer  "user_id"
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+    t.index ["item_id"], name: "index_watches_on_item_id", using: :btree
+    t.index ["user_id"], name: "index_watches_on_user_id", using: :btree
+  end
+
   add_foreign_key "leases", "items"
   add_foreign_key "leases", "users"
   add_foreign_key "publish_details", "items"
+  add_foreign_key "watches", "items"
+  add_foreign_key "watches", "users"
 end

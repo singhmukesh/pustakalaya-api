@@ -110,4 +110,41 @@ RSpec.describe Lease, type: :model do
     it { is_expected.to belong_to(:item) }
     it { is_expected.to belong_to(:user) }
   end
+
+  describe '#notify' do
+    before do
+      @lease = FactoryGirl.create(:lease)
+    end
+
+    context 'when watch is active' do
+      it 'should sends a watch successfull email' do
+        expect { @lease.notify }.to change { Sidekiq::Extensions::DelayedMailer.jobs.size }.by(1)
+      end
+    end
+
+    context 'when watch is inactive' do
+      before do
+        @lease.update_attribute(:return_date, Time.current)
+        @lease.INACTIVE!
+      end
+
+      it 'should sends a unwatch successfull email' do
+        expect { @lease.notify }.to change { Sidekiq::Extensions::DelayedMailer.jobs.size }.by(1)
+      end
+    end
+  end
+
+  describe '#notify_to_watchers' do
+    before do
+      @number_of_watches = 4
+      item_quantity = 1
+      item = FactoryGirl.create(:book, quantity: item_quantity)
+      @leases = FactoryGirl.create_list(:lease, item_quantity, item_id: item.id)
+      FactoryGirl.create_list(:watch, @number_of_watches, item_id: item.id)
+    end
+
+    it 'should sends a book leased email' do
+      expect { @leases.first.notify_to_watchers }.to change { Sidekiq::Extensions::DelayedMailer.jobs.size }.by(@number_of_watches)
+    end
+  end
 end
