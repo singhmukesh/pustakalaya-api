@@ -81,7 +81,7 @@ RSpec.describe V1::LeasesController, type: :controller do
     context 'with valid attributes' do
       before do
         @lease = FactoryGirl.create(:lease, item_id: device.id, user_id: user.id)
-        post :return, params: {item_id: device.id}
+        post :return, params: {id: @lease.id}
       end
 
       it 'should respond with status ok' do
@@ -102,7 +102,7 @@ RSpec.describe V1::LeasesController, type: :controller do
     context 'with invalid attributes' do
       before do
         @lease = FactoryGirl.create(:lease, item_id: device.id, user_id: FactoryGirl.create(:user).id)
-        post :return, params: {item_id: device.id}
+        post :return, params: {id: @lease.id}
       end
 
       it 'should respond with status unauthorized' do

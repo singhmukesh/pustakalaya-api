@@ -17,8 +17,8 @@ class V1::LeasesController < V1::ApplicationController
   #
   # @response [Json] Lease and Item details
   def return
-    @lease = Lease.ACTIVE.find_by(user_id: current_user.id, item_id: params[:item_id])
-    raise CustomException::Unauthorized unless @lease.present?
+    @lease = Lease.ACTIVE.find(params[:id])
+    raise CustomException::Unauthorized unless @lease.user.id == current_user.id
     @lease.update_attribute(:return_date, Time.current)
     @lease.INACTIVE!
   end
