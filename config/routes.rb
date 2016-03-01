@@ -2,7 +2,11 @@ Rails.application.routes.draw do
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   namespace :v1, defaults: {format: :json} do
-    resources :items, only: [:create]
+    resources :items, only: [:create] do
+      member do
+        put :change_status
+      end
+    end
     resources :books, only: [:index]
     resources :leases, only: [:create] do
       collection do

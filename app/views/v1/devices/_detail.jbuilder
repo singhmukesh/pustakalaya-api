@@ -1,4 +1,5 @@
 json.extract! device, :id, :name, :image, :code, :description
+json.status book.status if @current_user.ADMIN?
 
 json.partial! 'v1/categories/index', item: device
 
