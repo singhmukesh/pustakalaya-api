@@ -16,6 +16,16 @@ class V1::UsersController < V1::ApplicationController
               end
   end
 
+  # @url v1/users/watches/
+  # @action GET
+  #
+  # Return watch list of users
+  #
+  # @response [Json] watches and Item details
+  def watches
+    @watches = current_user.watches.ACTIVE
+  end
+
   private
 
   def type
