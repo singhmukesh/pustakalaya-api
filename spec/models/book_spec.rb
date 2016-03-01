@@ -43,6 +43,16 @@ RSpec.describe Book, type: :model do
     end
   end
 
+  describe '.available' do
+    let!(:book) { FactoryGirl.create(:book) }
+    let!(:book2) { FactoryGirl.create(:book) }
+
+    it 'should provide available book' do
+      FactoryGirl.create_list(:lease, book.quantity, item: book)
+      expect(Book.available).to match_array book2
+    end
+  end
+
   describe '#unwatch' do
     before do
       item_quantity = 1
@@ -54,7 +64,7 @@ RSpec.describe Book, type: :model do
 
     it 'should set watch as INACTIVE' do
       @item.unwatch(@user.id)
-      expect(@watch.INACTIVE? ).to be_falsey
+      expect(@watch.INACTIVE?).to be_falsey
     end
 
     it 'should sends a unwatch successfully email' do

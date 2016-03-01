@@ -1,9 +1,9 @@
 class V1::WatchesController < V1::ApplicationController
-  after_action :notify
-
   def create
     @watch = current_user.watches.new(watch_params)
     @watch.save!
+
+    UserMailer.delay(queue: "mailer_#{Rails.env}").watch(current_user.id)
   end
 
   # @url v1/watches/unwatch
@@ -18,15 +18,13 @@ class V1::WatchesController < V1::ApplicationController
     @watch = Watch.ACTIVE.find_by(user_id: current_user.id, item_id: params[:item_id])
     raise CustomException::Unauthorized unless @watch.present?
     @watch.INACTIVE!
+
+    UserMailer.delay(queue: "mailer_#{Rails.env}").unwatch(current_user.id)
   end
 
   private
 
   def watch_params
     params.require(:watch).permit(:id, :item_id)
-  end
-
-  def notify
-    @watch.notify
   end
 end
