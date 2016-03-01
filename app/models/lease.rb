@@ -36,6 +36,16 @@ class Lease < ApplicationRecord
     end
   end
 
+  # Provides leased books
+  def self.books
+    includes(:item).where(items: {type: Book.to_s})
+  end
+
+  # Provides leased devices
+  def self.devices
+    includes(:item).where(items: {type: Device.to_s})
+  end
+
   private
 
   def already_leased

@@ -16,7 +16,8 @@ Rails.application.routes.draw do
     end
     resources :users, only: [] do
       collection do
-        get :account
+        get :leases
+        get :watches
       end
     end
   end
