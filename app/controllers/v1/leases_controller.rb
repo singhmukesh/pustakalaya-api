@@ -19,7 +19,7 @@ class V1::LeasesController < V1::ApplicationController
   def return
     @lease = Lease.ACTIVE.find(params[:id])
     raise CustomException::Unauthorized unless @lease.user.id == current_user.id
-    @lease.update_attribute(:return_date, Time.current)
+    @lease.update({return_date: Time.current})
     @lease.INACTIVE!
   end
 
