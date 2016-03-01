@@ -10,6 +10,6 @@ json.available book.available?.to_s
 
 json.leases do
   book.leases.ACTIVE.each do |lease|
-    json.partial! 'v1/leases/show', lease: lease
+    json.partial! 'v1/leases/detail', lease: lease
   end
 end

@@ -62,30 +62,29 @@ RSpec.describe UserMailer, type: :mailer do
   end
 
   describe '#watch' do
-    book_quantity = 1
-    book = FactoryGirl.create(:book, quantity: book_quantity)
-    FactoryGirl.create_list(:lease, book_quantity, item_id: book.id)
-    let(:watch) { FactoryGirl.create(:watch, item_id: book.id) }
-
-    let(:mail) { UserMailer.watch(watch.id) }
-
     before do
+      book_quantity = 1
+      book = FactoryGirl.create(:book, quantity: book_quantity)
+      FactoryGirl.create_list(:lease, book_quantity, item_id: book.id)
+      @watch =  FactoryGirl.create(:watch, item_id: book.id)
+      @mail = UserMailer.watch(@watch.id)
+
       ActionMailer::Base.delivery_method = :test
       ActionMailer::Base.perform_deliveries = true
       ActionMailer::Base.deliveries = []
     end
 
     it 'renders the receiver email' do
-      expect(mail.to).to eql([watch.user.email])
+      expect(@mail.to).to eql([@watch.user.email])
     end
 
     it 'renders the sender email' do
-      expect(mail.from).to eql(ENV['MAILER_EMAIL'].scan(/<([^>]*)>/).first)
+      expect(@mail.from).to eql(ENV['MAILER_EMAIL'].scan(/<([^>]*)>/).first)
     end
 
     it 'delay the mails sending process' do
       expect {
-        UserMailer.delay.watch(watch.id)
+        UserMailer.delay.watch(@watch.id)
       }.to change(Sidekiq::Extensions::DelayedMailer.jobs, :size).by(1)
     end
 
@@ -95,30 +94,29 @@ RSpec.describe UserMailer, type: :mailer do
   end
 
   describe '#unwatch' do
-    book_quantity = 1
-    book = FactoryGirl.create(:book, quantity: book_quantity)
-    FactoryGirl.create_list(:lease, book_quantity, item_id: book.id)
-    let(:watch) { FactoryGirl.create(:watch, item_id: book.id) }
-
-    let(:mail) { UserMailer.unwatch(watch.id) }
-
     before do
+      book_quantity = 1
+      book = FactoryGirl.create(:book, quantity: book_quantity)
+      FactoryGirl.create_list(:lease, book_quantity, item_id: book.id)
+      @watch =  FactoryGirl.create(:watch, item_id: book.id)
+      @mail = UserMailer.unwatch(@watch.id)
+
       ActionMailer::Base.delivery_method = :test
       ActionMailer::Base.perform_deliveries = true
       ActionMailer::Base.deliveries = []
     end
 
     it 'renders the receiver email' do
-      expect(mail.to).to eql([watch.user.email])
+      expect(@mail.to).to eql([@watch.user.email])
     end
 
     it 'renders the sender email' do
-      expect(mail.from).to eql(ENV['MAILER_EMAIL'].scan(/<([^>]*)>/).first)
+      expect(@mail.from).to eql(ENV['MAILER_EMAIL'].scan(/<([^>]*)>/).first)
     end
 
     it 'delay the mails sending process' do
       expect {
-        UserMailer.delay.unwatch(watch.id)
+        UserMailer.delay.unwatch(@watch.id)
       }.to change(Sidekiq::Extensions::DelayedMailer.jobs, :size).by(1)
     end
 
@@ -128,14 +126,12 @@ RSpec.describe UserMailer, type: :mailer do
   end
 
   describe '#notification_to_watchers' do
-    book_quantity = 1
-    book = FactoryGirl.create(:book, quantity: book_quantity)
-    FactoryGirl.create_list(:lease, book_quantity, item_id: book.id)
-    let(:watch) { FactoryGirl.create(:watch, item_id: book.id) }
-
-    let(:mail) { UserMailer.notification_to_watchers(book.leases.ACTIVE.first.id, watch.id) }
-
     before do
+      book_quantity = 1
+      book = FactoryGirl.create(:book, quantity: book_quantity)
+      FactoryGirl.create_list(:lease, book_quantity, item_id: book.id)
+      @watch = FactoryGirl.create(:watch, item_id: book.id)
+      @mail = UserMailer.notification_to_watchers(book.leases.ACTIVE.first.id, @watch.id)
       @lease = book.leases.ACTIVE.first
 
       ActionMailer::Base.delivery_method = :test
@@ -144,16 +140,16 @@ RSpec.describe UserMailer, type: :mailer do
     end
 
     it 'renders the receiver email' do
-      expect(mail.to).to eql([watch.user.email])
+      expect(@mail.to).to eql([@watch.user.email])
     end
 
     it 'renders the sender email' do
-      expect(mail.from).to eql(ENV['MAILER_EMAIL'].scan(/<([^>]*)>/).first)
+      expect(@mail.from).to eql(ENV['MAILER_EMAIL'].scan(/<([^>]*)>/).first)
     end
 
     it 'delay the mails sending process' do
       expect {
-        UserMailer.delay.notification_to_watchers(@lease.id, watch.id)
+        UserMailer.delay.notification_to_watchers(@lease.id, @watch.id)
       }.to change(Sidekiq::Extensions::DelayedMailer.jobs, :size).by(1)
     end
 

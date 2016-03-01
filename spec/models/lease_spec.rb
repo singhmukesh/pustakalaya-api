@@ -147,4 +147,24 @@ RSpec.describe Lease, type: :model do
       expect { @leases.first.notify_to_watchers }.to change { Sidekiq::Extensions::DelayedMailer.jobs.size }.by(@number_of_watches)
     end
   end
+
+  describe '.books' do
+    let(:lease_book1) { FactoryGirl.create(:lease, :lease_book) }
+    let(:lease_book2) { FactoryGirl.create(:lease, :lease_book) }
+    FactoryGirl.create(:lease)
+
+    it "should provides all book's leases" do
+      expect(Lease.ACTIVE.books).to match_array [lease_book1, lease_book2]
+    end
+  end
+
+  describe '.devices' do
+    let(:lease1) { FactoryGirl.create(:lease) }
+    let(:lease2) { FactoryGirl.create(:lease) }
+    FactoryGirl.create(:lease, :lease_book)
+
+    it "should provides all device's leases" do
+      expect(Lease.ACTIVE.devices).to match_array [lease1, lease2]
+    end
+  end
 end

@@ -14,6 +14,13 @@ Rails.application.routes.draw do
         post :unwatch
       end
     end
+    resources :users, only: [] do
+      collection do
+        get :info
+        get :leases
+        get :watches
+      end
+    end
   end
 
   require 'sidekiq/web'
