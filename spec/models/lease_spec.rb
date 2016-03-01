@@ -11,8 +11,6 @@ RSpec.describe Lease, type: :model do
     it { is_expected.to validate_presence_of(:issue_date) }
     it { is_expected.to validate_presence_of(:due_date) }
     it { is_expected.to validate_absence_of(:return_date).on(:create) }
-    it { is_expected.to validate_absence_of(:issue_date).on(:update) }
-    it { is_expected.to validate_absence_of(:due_date).on(:update) }
     it { is_expected.to validate_numericality_of(:renew_count).is_less_than_or_equal_to(ENV['MAX_TIME_FOR_RENEW'].to_i) }
   end
 
@@ -111,5 +109,62 @@ RSpec.describe Lease, type: :model do
   describe 'association' do
     it { is_expected.to belong_to(:item) }
     it { is_expected.to belong_to(:user) }
+  end
+
+  describe '#notify' do
+    before do
+      @lease = FactoryGirl.create(:lease)
+    end
+
+    context 'when watch is active' do
+      it 'should sends a watch successfull email' do
+        expect { @lease.notify }.to change { Sidekiq::Extensions::DelayedMailer.jobs.size }.by(1)
+      end
+    end
+
+    context 'when watch is inactive' do
+      before do
+        @lease.update_attribute(:return_date, Time.current)
+        @lease.INACTIVE!
+      end
+
+      it 'should sends a unwatch successfull email' do
+        expect { @lease.notify }.to change { Sidekiq::Extensions::DelayedMailer.jobs.size }.by(1)
+      end
+    end
+  end
+
+  describe '#notify_to_watchers' do
+    before do
+      @number_of_watches = 4
+      item_quantity = 1
+      item = FactoryGirl.create(:book, quantity: item_quantity)
+      @leases = FactoryGirl.create_list(:lease, item_quantity, item_id: item.id)
+      FactoryGirl.create_list(:watch, @number_of_watches, item_id: item.id)
+    end
+
+    it 'should sends a book leased email' do
+      expect { @leases.first.notify_to_watchers }.to change { Sidekiq::Extensions::DelayedMailer.jobs.size }.by(@number_of_watches)
+    end
+  end
+
+  describe '.books' do
+    let(:lease_book1) { FactoryGirl.create(:lease, :lease_book) }
+    let(:lease_book2) { FactoryGirl.create(:lease, :lease_book) }
+    FactoryGirl.create(:lease)
+
+    it "should provides all book's leases" do
+      expect(Lease.ACTIVE.books).to match_array [lease_book1, lease_book2]
+    end
+  end
+
+  describe '.devices' do
+    let(:lease1) { FactoryGirl.create(:lease) }
+    let(:lease2) { FactoryGirl.create(:lease) }
+    FactoryGirl.create(:lease, :lease_book)
+
+    it "should provides all device's leases" do
+      expect(Lease.ACTIVE.devices).to match_array [lease1, lease2]
+    end
   end
 end

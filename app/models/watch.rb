@@ -4,7 +4,16 @@ class Watch < ApplicationRecord
 
   enum status: [:ACTIVE, :INACTIVE]
 
-  validate :watchable
+  validate :watchable, on: :create
+
+  # Notify to the user with email
+  def notify
+    if self.ACTIVE?
+      UserMailer.delay(queue: "mailer_#{Rails.env}").watch(self.id)
+    else
+      UserMailer.delay(queue: "mailer_#{Rails.env}").unwatch(self.id)
+    end
+  end
 
   private
 

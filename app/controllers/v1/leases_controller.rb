@@ -1,10 +1,26 @@
 class V1::LeasesController < V1::ApplicationController
-  after_action :lease_notification, only: :create
+  after_action :notify
+  after_action :unwatch_book, only: :create
   rescue_from CustomException::ItemUnavailable, with: :item_unavailable
 
   def create
-    @lease = Lease.new(lease_params.merge!(user_id: current_user.id))
+    @lease = current_user.leases.new(lease_params)
     @lease.save!
+  end
+
+  # @url v1/leases/return
+  # @action POST
+  #
+  # Return leased item
+  #
+  # @required item_id [Integer] Id of item to be returned
+  #
+  # @response [Json] Lease and Item details
+  def return
+    @lease = Lease.ACTIVE.find(params[:id])
+    raise CustomException::Unauthorized unless @lease.user == current_user
+    @lease.update({return_date: Time.current})
+    @lease.INACTIVE!
   end
 
   private
@@ -17,7 +33,16 @@ class V1::LeasesController < V1::ApplicationController
     render json: {message: error.message}, status: :conflict
   end
 
-  def lease_notification
-    UserMailer.delay(queue: "mailer_#{Rails.env}").lease_success(@lease.id)
+  def notify
+    @lease.notify
+    @lease.notify_to_watchers
+  end
+
+  def unwatch_book
+    item = @lease.item
+
+    if item.type == Book.to_s
+      item.unwatch(current_user.id)
+    end
   end
 end

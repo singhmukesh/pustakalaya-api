@@ -19,6 +19,15 @@ class Book < Item
     end
     where(id: available)
   end
+  
+  def unwatch(user_id)
+    watch = self.watches.ACTIVE.find_by(user_id: user_id)
+
+    if watch.present?
+      watch.INACTIVE!
+      UserMailer.delay(queue: "mailer_#{Rails.env}").unwatch(watch.id)
+    end
+  end
 
   private
 

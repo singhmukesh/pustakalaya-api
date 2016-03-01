@@ -29,4 +29,38 @@ RSpec.describe V1::WatchesController, type: :controller do
       expect(Watch.last.item.code).to eq book.code
     end
   end
+
+  describe '#unwatch' do
+    before do
+      book.update_attribute(:quantity, 1)
+      FactoryGirl.create(:lease, item_id: book.id)
+    end
+
+    context 'with valid attributes' do
+      before do
+        @watch = FactoryGirl.create(:watch, item_id: book.id, user_id: user.id)
+        post :unwatch, params: { item_id: book.id }
+      end
+
+      it 'should respond with status ok' do
+        is_expected.to respond_with :ok
+      end
+
+      it 'should have status as INACTIVE' do
+        @watch.reload
+        expect(@watch.INACTIVE?).to be_truthy
+      end
+    end
+
+    context 'with invalid attributes' do
+      before do
+        @watch = FactoryGirl.create(:watch, item_id: book.id, user_id: FactoryGirl.create(:user).id)
+        post :unwatch, params: { item_id: book.id }
+      end
+
+      it 'should respond with status unauthorized' do
+        is_expected.to respond_with :unauthorized
+      end
+    end
+  end
 end
