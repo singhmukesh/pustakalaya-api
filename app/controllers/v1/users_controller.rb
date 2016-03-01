@@ -1,5 +1,11 @@
 class V1::UsersController < V1::ApplicationController
 
+  # @url v1/users/info
+  # @action GET
+  #
+  # Show current user detail
+  #
+  # @response [Json]
   def info
     @user = current_user
   end
@@ -7,7 +13,7 @@ class V1::UsersController < V1::ApplicationController
   # @url v1/users/leases/
   # @action GET
   #
-  # Return leased by users
+  # Return leased associated to current user
   #
   # @response [Json] Lease and Item details
   def leases
@@ -23,7 +29,7 @@ class V1::UsersController < V1::ApplicationController
   # @url v1/users/watches/
   # @action GET
   #
-  # Return watch list of users
+  # Return watch list of current user
   #
   # @response [Json] watches and Item details
   def watches
