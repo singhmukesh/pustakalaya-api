@@ -1,0 +1,17 @@
+<p><%= t('user_mailer.return.message', item_type: @item.type.downcase, item_name: @item.name) %></p>
+
+<p><%= t('user_mailer.note_the_following_date') %></p>
+<table>
+  <tr>
+    <td><%= t('user_mailer.issue_date') %>:</td>
+    <td><%= @lease.issue_date.strftime('%A, %d %B %Y, %I:%M%p') %></td>
+  </tr>
+  <tr>
+    <td><%= t('user_mailer.due_date') %>:</td>
+    <td><%= @lease.due_date.strftime('%A, %d %B %Y, %I:%M%p') %></td>
+  </tr>
+  <tr>
+    <td><%= t('user_mailer.return_date') %>:</td>
+    <td><%= @lease.return_date.strftime('%A, %d %B %Y, %I:%M%p') %></td>
+  </tr>
+</table>

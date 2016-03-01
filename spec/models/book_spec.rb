@@ -42,4 +42,23 @@ RSpec.describe Book, type: :model do
       end
     end
   end
+
+  describe '#unwatch' do
+    before do
+      item_quantity = 1
+      @item = FactoryGirl.create(:book, quantity: item_quantity)
+      @user = FactoryGirl.create(:user)
+      FactoryGirl.create_list(:lease, item_quantity, item_id: @item.id)
+      @watch = FactoryGirl.create(:watch, item_id: @item.id, user_id: @user.id)
+    end
+
+    it 'should set watch as INACTIVE' do
+      @item.unwatch(@user.id)
+      expect(@watch.INACTIVE? ).to be_falsey
+    end
+
+    it 'should sends a unwatch successfully email' do
+      expect { @item.unwatch(@user.id) }.to change { Sidekiq::Extensions::DelayedMailer.jobs.size }.by(1)
+    end
+  end
 end

@@ -4,7 +4,11 @@ Rails.application.routes.draw do
   namespace :v1, defaults: {format: :json} do
     resources :items, only: [:create]
     resources :books, only: [:index]
-    resources :leases, only: [:create]
+    resources :leases, only: [:create] do
+      collection do
+        post 'return'
+      end
+    end
     resources :watches, only: [:create] do
       collection do
         post :unwatch
@@ -16,4 +20,10 @@ Rails.application.routes.draw do
       end
     end
   end
+
+  require 'sidekiq/web'
+  Sidekiq::Web.use Rack::Auth::Basic do |username, password|
+    username == ENV['SIDEKIQ_USERNAME'] && password == ENV['SIDEKIQ_PASSWORD']
+  end
+  mount Sidekiq::Web, at: "/sidekiq"
 end

@@ -1,4 +1,4 @@
-json.extract! device, :name, :image, :code, :description
+json.extract! device, :id, :name, :image, :code, :description
 
 json.partial! 'v1/categories/index', item: device
 

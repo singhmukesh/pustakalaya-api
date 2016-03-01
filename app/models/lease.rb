@@ -5,10 +5,9 @@ class Lease < ApplicationRecord
   belongs_to :item
 
   validates_presence_of :issue_date, :due_date, if: :device?
-  validates_absence_of :issue_date, :due_date, on: :update
   validates_absence_of :return_date, on: :create
   validates_numericality_of :renew_count, less_than_or_equal_to: ENV['MAX_TIME_FOR_RENEW'].to_i
-  validate :already_leased
+  validate :already_leased, on: :create
   validate :validate_due_date, on: :create, if: :device?
   validate :book_available, on: :create, if: :book?
   validate :device_available, on: :create, if: :device?
@@ -18,6 +17,24 @@ class Lease < ApplicationRecord
   validates_datetime :return_date, on_or_before: lambda { Time.current }, allow_nil: true
 
   enum status: [:ACTIVE, :INACTIVE, :EXTENDED]
+
+  # Notify user with email when item is leased or return
+  def notify
+    if self.ACTIVE?
+      UserMailer.delay(queue: "mailer_#{Rails.env}").lease(self.id)
+    else
+      UserMailer.delay(queue: "mailer_#{Rails.env}").return(self.id)
+    end
+  end
+
+  # Notify to Book watchers when the book is leased or return
+  def notify_to_watchers
+    if self.item.type == Book.to_s
+      self.item.watches.ACTIVE.each do |watch|
+        UserMailer.delay(queue: "mailer_#{Rails.env}").notification_to_watchers(self.id, watch.id)
+      end
+    end
+  end
 
   private
 
