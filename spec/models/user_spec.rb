@@ -8,6 +8,7 @@ RSpec.describe User, type: :model do
   describe 'association' do
     it { is_expected.to have_many :leases }
     it { is_expected.to have_many :watches }
+    it { is_expected.to have_many :ratings }
   end
 
   describe 'presence' do
