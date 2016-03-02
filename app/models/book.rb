@@ -13,11 +13,7 @@ class Book < Item
   end
 
   def self.available
-    available = []
-    self.all.each do |book|
-      available << book.id if book.available?
-    end
-    where(id: available)
+    select('*, IFNULL(c,0) co').joins('LEFT OUTER JOIN (select item_id, count(*) c from leases where status=0 GROUP BY item_id) AS a ON a.item_id=items.id').having('quantity>co').having(status: 0)
   end
 
   def unwatch(user_id)
