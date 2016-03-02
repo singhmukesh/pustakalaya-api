@@ -5,7 +5,7 @@ json.publish_detail do
   json.partial! 'v1/publish_details/show', publish_detail: book.publish_detail
 end
 
-json.partial! 'v1/categories/index', item: book
+json.partial! 'v1/categories/list', item: book
 
 json.available book.available?.to_s
 

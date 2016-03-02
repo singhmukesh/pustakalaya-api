@@ -25,6 +25,7 @@ Rails.application.routes.draw do
         get :watches
       end
     end
+    resources :categories, only: [:index]
   end
 
   require 'sidekiq/web'
