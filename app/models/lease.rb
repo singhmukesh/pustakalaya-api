@@ -36,14 +36,36 @@ class Lease < ApplicationRecord
     end
   end
 
-  # Provides leased books
-  def self.books
-    includes(:item).where(items: {type: Book.to_s})
-  end
+  class << self
+    # Provides the collection of Lease of books
+    #
+    # @return [Lease::ActiveRecord_Relation Collection]
+    def books
+      includes(:item).where(items: {type: Book.to_s})
+    end
 
-  # Provides leased devices
-  def self.devices
-    includes(:item).where(items: {type: Device.to_s})
+    # Provides the collection of Lease of devices
+    #
+    # @return [Lease::ActiveRecord_Relation Collection]
+    def devices
+      includes(:item).where(items: {type: Device.to_s})
+    end
+
+    # Provides the collection of leases
+    #
+    # @params group [String] expected to be value of Item::ActiveRecord_Relation type attribute value
+    #
+    # @return [Category::ActiveRecord_Relation Collection
+    def list(type = nil)
+      type.capitalize! if type.present?
+      if type == Book.to_s
+        books
+      elsif type == Device.to_s
+        devices
+      else
+        all
+      end
+    end
   end
 
   private

@@ -17,13 +17,7 @@ class V1::UsersController < V1::ApplicationController
   #
   # @response [Json] Lease and Item details
   def leases
-    @leases = if type == Book.to_s
-                current_user.leases.ACTIVE.books
-              elsif type == Device.to_s
-                current_user.leases.ACTIVE.devices
-              else
-                current_user.leases.ACTIVE
-              end
+    @leases = current_user.leases.ACTIVE.list(params[:type])
   end
 
   # @url v1/users/watches/
@@ -34,11 +28,5 @@ class V1::UsersController < V1::ApplicationController
   # @response [Json] watches and Item details
   def watches
     @watches = current_user.watches.ACTIVE
-  end
-
-  private
-
-  def type
-    params[:type].capitalize if params[:type].present?
   end
 end

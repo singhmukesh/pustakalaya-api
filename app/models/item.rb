@@ -12,4 +12,13 @@ class Item < ApplicationRecord
   accepts_nested_attributes_for :categories
 
   enum status: [:ACTIVE, :INACTIVE]
+
+  # Filter items by category
+  #
+  # @params category_id [Category::ActiveRecord_Relation id attribute]
+  #
+  # @return [Item::ActiveRecord_Relation Collection]
+  def self.find_by_category(category_id)
+    includes(:categories).where(categories: {id: category_id})
+  end
 end

@@ -167,4 +167,28 @@ RSpec.describe Lease, type: :model do
       expect(Lease.ACTIVE.devices).to match_array [lease1, lease2]
     end
   end
+
+  describe '.list' do
+    let!(:lease_device) { FactoryGirl.create(:lease) }
+    let!(:lease_book) { FactoryGirl.create(:lease, :lease_book) }
+
+    context "when params 'type' is undefined" do
+      it 'should provide lease' do
+        expect(Lease.list).to match_array [lease_book, lease_device]
+      end
+    end
+
+    context "when params 'type' value is 'book'" do
+      it 'should provide all book lease' do
+        expect(Lease.list(Book.to_s)).to match_array [lease_book]
+      end
+    end
+
+    context "when params 'type' value is 'Device'" do
+
+      it 'should provide all device leases' do
+        expect(Lease.list(Device.to_s)).to match_array [lease_device]
+      end
+    end
+  end
 end

@@ -71,4 +71,19 @@ RSpec.describe Book, type: :model do
       expect { @item.unwatch(@user.id) }.to change { Sidekiq::Extensions::DelayedMailer.jobs.size }.by(1)
     end
   end
+
+  describe '.find_by_category' do
+    let(:category1) { FactoryGirl.create(:category, :group_book) }
+    let(:category2) { FactoryGirl.create(:category, :group_book) }
+
+    it 'should return book of requested category' do
+      book1, book2, book3 = FactoryGirl.create_list(:book, 3)
+
+      book1.categories << category1
+      book2.categories << category1
+      book3.categories << category2
+
+      expect(Book.find_by_category(category1.id)).to match_array [book1, book2]
+    end
+  end
 end

@@ -8,18 +8,23 @@ class Book < Item
 
   accepts_nested_attributes_for :publish_detail
 
+  # Provides whether a book is available to lease
+  #
+  # @return [Boolean]
   def available?
     self.ACTIVE? && (self.leases.ACTIVE.count < self.quantity)
   end
 
+  # Provides the collection of available books
+  #
+  # @return [Book::ActiveRecord_Relation Collection]
   def self.available
-    available = []
-    self.all.each do |book|
-      available << book.id if book.available?
-    end
-    where(id: available)
+    select('*, IFNULL(c,0) co').joins('LEFT OUTER JOIN (select item_id, count(*) c from leases where status=0 GROUP BY item_id) AS a ON a.item_id=items.id').having('quantity>co').having(status: 0)
   end
 
+  # Remove the book form Watchlist of a user
+  #
+  # @params user_id [User::ActiveRecord_Relation id attribute]
   def unwatch(user_id)
     watch = self.watches.ACTIVE.find_by(user_id: user_id)
 
