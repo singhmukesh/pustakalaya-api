@@ -4,7 +4,6 @@ RSpec.describe V1::CategoriesController, group: :controller do
   let(:user) { FactoryGirl.create(:user) }
 
   before do
-    Category.delete_all
     allow(controller).to receive(:authenticate_user!)
     controller.instance_variable_set(:@current_user, user)
   end
