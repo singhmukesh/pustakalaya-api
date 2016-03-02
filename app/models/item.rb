@@ -14,7 +14,11 @@ class Item < ApplicationRecord
   enum status: [:ACTIVE, :INACTIVE]
 
   # Filter items by category
-  def self.find_by_category(category)
-    includes(:categories).where(categories: {title: category})
+  #
+  # @params category_id [Category::ActiveRecord_Relation id attribute]
+  #
+  # @return [Item::ActiveRecord_Relation Collection]
+  def self.find_by_category(category_id)
+    includes(:categories).where(categories: {id: category_id})
   end
 end
