@@ -12,4 +12,9 @@ class Item < ApplicationRecord
   accepts_nested_attributes_for :categories
 
   enum status: [:ACTIVE, :INACTIVE]
+
+  # Filter items by category
+  def self.find_by_category(category)
+    includes(:categories).where(categories: {title: category})
+  end
 end
