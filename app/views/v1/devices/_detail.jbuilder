@@ -1,7 +1,8 @@
 json.extract! device, :id, :name, :image, :code, :description
-json.status book.status if @current_user.ADMIN?
 
 json.partial! 'v1/categories/list', item: device
+
+json.lease @current_user.leased? device.id
 
 json.leases do
   json.array! device.leases.ACTIVE do |lease|
