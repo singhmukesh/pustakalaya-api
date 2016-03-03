@@ -14,3 +14,5 @@ json.leases do
     json.partial! 'v1/leases/detail', lease: lease
   end
 end
+
+json.partial! 'v1/ratings/detail', item: book

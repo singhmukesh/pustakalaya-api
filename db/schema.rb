@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160228102640) do
+ActiveRecord::Schema.define(version: 20160302111758) do
 
   create_table "categories", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "title",      null: false
@@ -65,6 +65,16 @@ ActiveRecord::Schema.define(version: 20160228102640) do
     t.index ["item_id"], name: "index_publish_details_on_item_id", using: :btree
   end
 
+  create_table "ratings", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer  "value",      null: false
+    t.integer  "user_id"
+    t.integer  "item_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["item_id"], name: "index_ratings_on_item_id", using: :btree
+    t.index ["user_id"], name: "index_ratings_on_user_id", using: :btree
+  end
+
   create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "role",       default: 0, null: false
     t.string   "name",                   null: false
@@ -88,6 +98,8 @@ ActiveRecord::Schema.define(version: 20160228102640) do
   add_foreign_key "leases", "items"
   add_foreign_key "leases", "users"
   add_foreign_key "publish_details", "items"
+  add_foreign_key "ratings", "items"
+  add_foreign_key "ratings", "users"
   add_foreign_key "watches", "items"
   add_foreign_key "watches", "users"
 end
