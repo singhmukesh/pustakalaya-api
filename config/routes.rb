@@ -7,7 +7,11 @@ Rails.application.routes.draw do
         put :change_status
       end
     end
-    resources :books, only: [:index]
+    resources :books, only: [:index] do
+      collection do
+        get :inactivated
+      end
+    end
     resources :leases, only: [:create] do
       collection do
         post 'return'

@@ -6,7 +6,7 @@ RSpec.describe Lease, type: :model do
   end
 
   subject { FactoryGirl.create(:lease) }
-  
+
   context 'when INACTIVE item is leased' do
     book = FactoryGirl.create(:book, status: Item.statuses[:INACTIVE])
     it 'should be raise exception CustomException::ItemUnavailable' do

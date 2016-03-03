@@ -1,5 +1,7 @@
+books = @books
+
 json.books do
-  json.array! @books do |book|
+  json.array! books do |book|
     json.partial! 'v1/items/detail', item: book
 
     json.publish_detail do
@@ -10,4 +12,4 @@ json.books do
   end
 end
 
-json.partial! 'v1/shared/pagination', collection: @books
+json.partial! 'v1/shared/pagination', collection: books
