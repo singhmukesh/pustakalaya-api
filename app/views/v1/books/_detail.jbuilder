@@ -16,3 +16,9 @@ json.leases do
 end
 
 json.partial! 'v1/ratings/detail', item: book
+
+json.reviews do
+  book.reviews.each do |review|
+    json.partial! 'v1/reviews/detail', review: review
+  end
+end

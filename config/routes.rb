@@ -27,6 +27,7 @@ Rails.application.routes.draw do
     end
     resources :categories, only: [:index]
     resources :ratings, only: [:create]
+    resources :reviews, only: [:create]
   end
 
   require 'sidekiq/web'
