@@ -9,6 +9,24 @@ class User < ApplicationRecord
   validates :name, :email, :uid, :role, presence: true
   validates_uniqueness_of :email, case_sensitive: false
 
+  # Provides whether the item is leases by user
+  #
+  # @params item_id [Item::ActiveRecord_Relation id attribute]
+  #
+  # @return [Boolean]
+  def leased?(item_id)
+    leases.ACTIVE.find_by(item_id: item_id).present?
+  end
+
+  # Provides whether the item is in Watchlist of user
+  #
+  # @params item_id [Item::ActiveRecord_Relation id attribute]
+  #
+  # @return [Boolean]
+  def watched?(item_id)
+    watches.ACTIVE.find_by(item_id: item_id).present?
+  end
+
   class << self
     # Verify whether the user details is present in system database and if not present create the new user with available details
     #
