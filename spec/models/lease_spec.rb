@@ -7,6 +7,13 @@ RSpec.describe Lease, type: :model do
 
   subject { FactoryGirl.create(:lease) }
 
+  context 'when INACTIVE item is leased' do
+    book = FactoryGirl.create(:book, status: Item.statuses[:INACTIVE])
+    it 'should be raise exception CustomException::ItemUnavailable' do
+      expect { FactoryGirl.create(:lease, item: book) }.to raise_exception CustomException::ItemUnavailable
+    end
+  end
+
   describe 'presence' do
     it { is_expected.to validate_presence_of(:issue_date) }
     it { is_expected.to validate_presence_of(:due_date) }
