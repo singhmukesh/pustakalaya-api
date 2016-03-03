@@ -1,10 +1,13 @@
 class V1::ItemsController < V1::ApplicationController
-  before_action :set_item, only: :change_status
+  before_action :set_item, only: [:show, :change_status]
 
   def create
     authorize Item
     @item = Item.new(item_params)
     @item.save!
+  end
+
+  def show
   end
 
   # @url v1/items/status
