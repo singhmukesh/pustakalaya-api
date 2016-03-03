@@ -4,6 +4,7 @@ class Lease < ApplicationRecord
   belongs_to :user
   belongs_to :item
 
+  validate :item_active, on: :create
   validates_presence_of :issue_date, :due_date, if: :device?
   validates_absence_of :return_date, on: :create
   validates_numericality_of :renew_count, less_than_or_equal_to: ENV['MAX_TIME_FOR_RENEW'].to_i
@@ -90,6 +91,12 @@ class Lease < ApplicationRecord
 
   def device_available
     unless self.item.available?(self.issue_date, self.due_date)
+      raise CustomException::ItemUnavailable
+    end
+  end
+
+  def item_active
+    unless self.item.ACTIVE?
       raise CustomException::ItemUnavailable
     end
   end
