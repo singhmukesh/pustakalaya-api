@@ -19,4 +19,25 @@ RSpec.describe Item, type: :model do
   describe 'uniqueness' do
     it { is_expected.to validate_uniqueness_of(:code).case_insensitive }
   end
+
+  describe '#rating' do
+    let(:kindle) { FactoryGirl.create(:kindle) }
+
+    context 'when kindle has rated' do
+      it 'should provide average rating' do
+        value1, value2, value3 = 3, 2, 5
+        FactoryGirl.create(:rating, value: value1, item: kindle)
+        FactoryGirl.create(:rating, value: value2, item: kindle)
+        FactoryGirl.create(:rating, value: value3, item: kindle)
+
+        expect(kindle.rating).to eq (value1+value2+value3)/3
+      end
+    end
+
+    context 'when kindle has no any rating' do
+      it 'should return 0' do
+        expect(kindle.rating).to eq 0
+      end
+    end
+  end
 end
