@@ -22,4 +22,13 @@ class Item < ApplicationRecord
   def self.find_by_category(category_id)
     includes(:categories).where(categories: {id: category_id})
   end
+
+  # Provides the overall rating value of item
+  #
+  # @return [Integer], Overall rating divided by count, if no any ratings are found then return -1
+  def rating
+    count = self.ratings.count
+    return -1 if count == 0
+    self.ratings.sum(:value)/count
+  end
 end
