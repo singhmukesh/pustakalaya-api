@@ -9,7 +9,7 @@ RSpec.describe V1::ItemsController, type: :controller do
   let(:user) { FactoryGirl.create(:user) }
   let(:admin) { FactoryGirl.create(:user, :role_admin) }
   let(:category) { FactoryGirl.create(:category, :group_book) }
-  let(:book) { FactoryGirl.create(:book) }
+  let!(:book) { FactoryGirl.create(:book) }
 
   before do
     allow(controller).to receive(:authenticate_user!)
@@ -43,6 +43,31 @@ RSpec.describe V1::ItemsController, type: :controller do
       it 'should create new Book' do
         expect(Book.count).to eq @book_count + 1
       end
+    end
+  end
+
+  describe '#show' do
+    context 'when showing existing record' do
+      before do
+        get :show, id: book
+      end
+
+      it 'should respond with status ok' do
+        is_expected.to respond_with :ok
+      end
+
+      it 'should assign book to @item' do
+        expect(assigns(:item)).to eq book
+      end
+    end
+
+    context 'when showing non existing record' do
+      before do
+        get :show, id: Item.last.id + 1
+      end
+
+      it { is_expected.to respond_with :not_found }
+      it { is_expected.to rescue_from ActiveRecord::RecordNotFound }
     end
   end
 
