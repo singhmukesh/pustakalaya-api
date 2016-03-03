@@ -32,6 +32,7 @@ en:
     available_to_lease: Available to lease
     already_watched: Already added to watchlist
     item_not_rateable: Item is not ratebale
+    item_not_reviewable: Item is not reviewable
   user_mailer:
     note_the_following_date: Please note the following dates.
     issue_date: Issue date

@@ -3,6 +3,7 @@ class Item < ApplicationRecord
   has_many :leases
   has_many :watches
   has_many :ratings
+  has_many :reviews
 
   validates :name, presence: true
   validates :code, presence: true, uniqueness: {case_sensitive: false}

@@ -2,6 +2,7 @@ class User < ApplicationRecord
   has_many :leases
   has_many :watches
   has_many :ratings
+  has_many :reviews
 
   enum role: [:USER, :ADMIN]
 
