@@ -54,29 +54,30 @@ class V1::ItemsController < V1::ApplicationController
     params[:status].upcase.to_sym
   end
 
-  def listing
-    type = params[:type]
-    type.capitalize! if type.present?
-    case type
-    when Book.to_s
-      @collection = Book
-      @search_key = 'name_or_description_or_publish_detail_author_cont'
-    when Device.to_s
-      @collection = Device
-      @search_key = 'name_or_description_cont'
-    when Kindle.to_s
-      @collection = Kindle
-      @search_key = 'name_or_description_or_publish_detail_author_cont'
-    else
-      @collection = Item
-      @search_key = 'name_or_description_cont'
-    end
-  end
-
   def filter
     listing
     @items = @collection.ransack({'s' => params[:sort], @search_key => params[:search]}).result
     @items = @items.find_by_category(params[:category_id]) if params[:category_id].present?
     @items = paginate(@items)
+  end
+
+  def listing
+    type = params[:type]
+    type.capitalize! if type.present?
+    case type
+    when Book.to_s
+      set_params(Book, 'name_or_description_or_publish_detail_author_cont')
+    when Device.to_s
+      set_params(Device, 'name_or_description_cont')
+    when Kindle.to_s
+      set_params(Kindle, 'name_or_description_or_publish_detail_author_cont')
+    else
+      set_params
+    end
+  end
+
+  def set_params(collection = Item, search_key = 'name_or_description_cont')
+    @collection = collection
+    @search_key = search_key
   end
 end
