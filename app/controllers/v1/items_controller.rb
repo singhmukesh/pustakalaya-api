@@ -1,5 +1,21 @@
 class V1::ItemsController < V1::ApplicationController
   before_action :set_item, only: [:show, :change_status]
+  before_action :filter, only: [:index, :inactivated]
+
+  def index
+    @items.ACTIVE
+  end
+
+  # @url v1/items/inactivated
+  # @action GET
+  #
+  # Provides listing of inactivated books
+  #
+  # @response [Json]
+  def inactivated
+    @items = @items.INACTIVE
+    render 'v1/items/index'
+  end
 
   def create
     authorize Item
@@ -36,5 +52,32 @@ class V1::ItemsController < V1::ApplicationController
 
   def status
     params[:status].upcase.to_sym
+  end
+
+  def filter
+    listing
+    @items = @collection.ransack({'s' => params[:sort], @search_key => params[:search]}).result
+    @items = @items.find_by_category(params[:category_id]) if params[:category_id].present?
+    @items = paginate(@items)
+  end
+
+  def listing
+    type = params[:type]
+    type.capitalize! if type.present?
+    case type
+    when Book.to_s
+      set_params(Book, 'name_or_description_or_publish_detail_author_cont')
+    when Device.to_s
+      set_params(Device, 'name_or_description_cont')
+    when Kindle.to_s
+      set_params(Kindle, 'name_or_description_or_publish_detail_author_cont')
+    else
+      set_params
+    end
+  end
+
+  def set_params(collection = Item, search_key = 'name_or_description_cont')
+    @collection = collection
+    @search_key = search_key
   end
 end

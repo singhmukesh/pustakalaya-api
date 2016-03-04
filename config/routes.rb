@@ -1,15 +1,22 @@
 Rails.application.routes.draw do
 
+  namespace :v1 do
+    get 'books/available'
+  end
+
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   namespace :v1, defaults: {format: :json} do
-    resources :items, only: [:create, :show] do
+    resources :items, only: [:index, :create, :show] do
       member do
         put :change_status
       end
-    end
-    resources :books, only: [:index] do
       collection do
         get :inactivated
+      end
+    end
+    resources :books, only: [] do
+      collection do
+        get 'available'
       end
     end
     resources :leases, only: [:create] do

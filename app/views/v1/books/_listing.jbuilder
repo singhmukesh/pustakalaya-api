@@ -1,5 +1,3 @@
-books = @books
-
 json.books do
   json.array! books do |book|
     json.partial! 'v1/items/detail', item: book
@@ -8,8 +6,6 @@ json.books do
       json.partial! 'v1/publish_details/show', publish_detail: book.publish_detail
     end
 
-    json.categories book.categories.pluck(:title)
+    json.partial! 'v1/categories/list', item: book
   end
 end
-
-json.partial! 'v1/shared/pagination', collection: books

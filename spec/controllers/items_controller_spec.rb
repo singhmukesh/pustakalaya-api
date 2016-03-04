@@ -1,11 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe V1::ItemsController, type: :controller do
-end
-
-require 'rails_helper'
-
-RSpec.describe V1::ItemsController, type: :controller do
   let(:user) { FactoryGirl.create(:user) }
   let(:admin) { FactoryGirl.create(:user, :role_admin) }
   let(:category) { FactoryGirl.create(:category, :group_book) }
@@ -14,6 +9,97 @@ RSpec.describe V1::ItemsController, type: :controller do
   before do
     allow(controller).to receive(:authenticate_user!)
     controller.instance_variable_set(:@current_user, admin)
+  end
+
+  describe '#index' do
+    context 'when params type is book' do
+      before do
+        FactoryGirl.create_list(:book, 12)
+      end
+      context 'without params' do
+        before do
+          get :index, type: Book.to_s
+        end
+
+        it { is_expected.to respond_with :ok }
+        it 'should list default number of books' do
+          expect(assigns(:items)).to match_array Book.ACTIVE.order('created_at DESC').limit(WillPaginate.per_page)
+        end
+      end
+
+      context 'with pagination' do
+        context 'with per page value in first page' do
+          let(:page) { 1 }
+          let(:per_page) { 3 }
+
+          before do
+            get :index, type: Book.to_s, page: page, per_page: per_page
+          end
+
+          it { is_expected.to respond_with :ok }
+          it 'assigns the last three books to @items' do
+            expect(assigns(:items)).to match_array Book.ACTIVE.order('created_at DESC').limit(3)
+          end
+        end
+      end
+    end
+
+    context 'when param type is not defined' do
+      before do
+        FactoryGirl.create_list(:book, 2)
+        FactoryGirl.create_list(:kindle, 3)
+        FactoryGirl.create_list(:device, 1)
+        get :index
+      end
+
+      it { is_expected.to respond_with :ok }
+      it 'should list default number of items' do
+        expect(assigns(:items)).to match_array Item.ACTIVE.order('created_at DESC').limit(WillPaginate.per_page)
+      end
+    end
+  end
+
+  describe '#inactivated' do
+    FactoryGirl.create_list(:book, 3)
+    FactoryGirl.create(:device)
+    FactoryGirl.create(:kindle)
+    let!(:inactive_book) { FactoryGirl.create(:book, status: Item.statuses[:INACTIVE]) }
+    let!(:inactive_kindle1) { FactoryGirl.create(:kindle, status: Item.statuses[:INACTIVE]) }
+    let!(:inactive_kindle2) { FactoryGirl.create(:kindle, status: Item.statuses[:INACTIVE]) }
+    let!(:inactive_device) { FactoryGirl.create(:device, status: Item.statuses[:INACTIVE]) }
+
+    context 'when param type is not defined' do
+      before do
+        get :inactivated
+      end
+
+      it { is_expected.to respond_with :ok }
+      it 'should provides list of inactive items' do
+        expect(assigns(:items)).to match_array [inactive_book, inactive_kindle1, inactive_kindle2, inactive_device]
+      end
+    end
+
+    context 'when param type is kindle' do
+      before do
+        get :inactivated, type: Kindle.to_s
+      end
+
+      it { is_expected.to respond_with :ok }
+      it 'should provides list of inactive kindles' do
+        expect(assigns(:items)).to match_array [inactive_kindle1, inactive_kindle2]
+      end
+    end
+
+    context 'when param type is device' do
+      before do
+        get :inactivated, type: Device.to_s
+      end
+
+      it { is_expected.to respond_with :ok }
+      it 'should provides list of inactive devices' do
+        expect(assigns(:items)).to match_array [inactive_device]
+      end
+    end
   end
 
   describe '#create' do
