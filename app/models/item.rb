@@ -15,6 +15,10 @@ class Item < ApplicationRecord
 
   enum status: [:ACTIVE, :INACTIVE]
 
+  scope :books, -> { where(type: Book.to_s) }
+  scope :kindles, -> { where(type: Kindle.to_s) }
+  scope :devices, -> { where(type: Device.to_s) }
+
   # Filter items by category
   #
   # @params category_id [Category::ActiveRecord_Relation id attribute]
