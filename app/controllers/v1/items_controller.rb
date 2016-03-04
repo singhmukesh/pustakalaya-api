@@ -40,6 +40,17 @@ class V1::ItemsController < V1::ApplicationController
     @item.update({status: Item.statuses[status]})
   end
 
+  # @url v1/items/leased
+  # @action GET
+  #
+  # Provides listing of leased items
+  #
+  # @response [Json]
+  def leased
+    @items = Item.where(id: leased_item_ids)
+    @items = paginate(@items)
+  end
+
   private
 
   def item_params
@@ -79,5 +90,18 @@ class V1::ItemsController < V1::ApplicationController
   def set_params(collection = Item, search_key = 'name_or_description_cont')
     @collection = collection
     @search_key = search_key
+  end
+
+  def leased_item_ids
+    type = params[:type]
+    type.capitalize! if type.present?
+    case type
+    when Book.to_s
+      Lease.ACTIVE.books.pluck(:item_id).uniq
+    when Device.to_s
+      Lease.ACTIVE.devices.pluck(:item_id).uniq
+    else
+      Lease.ACTIVE.pluck(:item_id).uniq
+    end
   end
 end

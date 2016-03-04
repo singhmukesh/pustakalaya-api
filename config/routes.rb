@@ -12,6 +12,7 @@ Rails.application.routes.draw do
       end
       collection do
         get :inactivated
+        get 'leased'
       end
     end
     resources :books, only: [] do
