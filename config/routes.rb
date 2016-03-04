@@ -12,12 +12,12 @@ Rails.application.routes.draw do
       end
       collection do
         get :inactivated
+        get 'leased'
       end
     end
     resources :books, only: [] do
       collection do
         get 'available'
-        get 'leased'
       end
     end
     resources :leases, only: [:create] do
