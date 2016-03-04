@@ -17,6 +17,7 @@ Rails.application.routes.draw do
     resources :books, only: [] do
       collection do
         get 'available'
+        get 'leased'
       end
     end
     resources :leases, only: [:create] do
