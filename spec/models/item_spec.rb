@@ -56,6 +56,20 @@ RSpec.describe Item, type: :model do
     end
   end
 
+  describe '.leaseable?' do
+    context 'when item is Book' do
+      it { expect(Item.leaseable?(Book.to_s)).to be_truthy }
+    end
+
+    context 'when item is Device' do
+      it { expect(Item.leaseable?(Device.to_s)).to be_truthy }
+    end
+
+    context 'when item is Kindle' do
+      it { expect(Item.leaseable?(Kindle.to_s)).to be_falsey }
+    end
+  end
+
   describe '.most_rated' do
     let(:book1) { FactoryGirl.create(:book) }
     let(:book2) { FactoryGirl.create(:book) }
@@ -67,6 +81,37 @@ RSpec.describe Item, type: :model do
 
     it 'should provide Book with highest rating' do
       expect(Item.most_rated).to match_array [book1]
+    end
+  end
+
+  describe '.most_leased' do
+    context 'when params type is Book' do
+      let(:book1) { FactoryGirl.create(:book) }
+      let(:book2) { FactoryGirl.create(:book) }
+
+      before do
+        FactoryGirl.create_list(:lease, 3, item: book1)
+        FactoryGirl.create(:lease, item: book2)
+        FactoryGirl.create(:lease)
+      end
+
+      it 'should provide most leased Book' do
+        expect(Item.most_leased(Book.to_s)).to match_array [book1]
+      end
+    end
+
+    context 'when params type is Device' do
+      let(:device1) { FactoryGirl.create(:device) }
+      let(:device2) { FactoryGirl.create(:device) }
+
+      before do
+        FactoryGirl.create_list(:lease, 2, item: device1)
+        FactoryGirl.create(:lease, item: device2)
+      end
+
+      it 'should provide most leased Book' do
+        expect(Item.most_leased(Device.to_s)).to match_array [device1]
+      end
     end
   end
 end

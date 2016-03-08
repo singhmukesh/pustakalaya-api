@@ -47,9 +47,23 @@ class Item < ApplicationRecord
       case type
       when Book.to_s
         true
-      when Device.to_s
-        false
       when Kindle.to_s
+        true
+      else
+        false
+      end
+    end
+
+    # Provides whether item is leaseable or not
+    #
+    # @params type [Item::ActiveRecord_Relation type attribute]
+    #
+    # @return [Boolean]
+    def leaseable?(type)
+      case type
+      when Book.to_s
+        true
+      when Device.to_s
         true
       else
         false
@@ -58,7 +72,7 @@ class Item < ApplicationRecord
   end
 
   class << self
-    # Provides the collection of items
+    # Provides the collection of most rated items
     #
     # @params type [String] expected to be value of Item::ActiveRecord_Relation type attribute
     # @params number [Integer] number of item
@@ -66,7 +80,18 @@ class Item < ApplicationRecord
     # @return [Item::ActiveRecord_Relation Collection]
     def most_rated(type = Book.to_s, number = 1)
       raise ActiveRecord::StatementInvalid unless Item.rateable?(type)
-      self.joins(:ratings).group('ratings.item_id').order('avg(ratings.value) desc').ACTIVE.limit(number)
+      joins(:ratings).group('ratings.item_id').order('avg(ratings.value) desc').ACTIVE.where("type = '#{type}'").limit(number)
+    end
+
+    # Provides the collection of most leased items
+    #
+    # @params type [String] expected to be value of Item::ActiveRecord_Relation type attribute
+    # @params number [Integer] number of item
+    #
+    # @return [Item::ActiveRecord_Relation Collection]
+    def most_leased(type = Book.to_s, number = 1)
+      raise ActiveRecord::StatementInvalid unless Item.leaseable?(type)
+     joins(:leases).group('leases.item_id').order('count(leases.item_id) desc').ACTIVE.where("type = '#{type}'").limit(number)
     end
   end
 end
