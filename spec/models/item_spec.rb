@@ -90,7 +90,7 @@ RSpec.describe Item, type: :model do
       let(:book2) { FactoryGirl.create(:book) }
 
       before do
-        FactoryGirl.create_list(:lease, 3, item: book1)
+        FactoryGirl.create_list(:lease, 2, item: book1)
         FactoryGirl.create(:lease, item: book2)
         FactoryGirl.create(:lease)
       end

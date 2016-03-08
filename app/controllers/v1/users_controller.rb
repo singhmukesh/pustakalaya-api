@@ -30,6 +30,7 @@ class V1::UsersController < V1::ApplicationController
   # @response [Json] watches and Item details
   def watches
     @watches = current_user.watches.ACTIVE
+    @watches = paginate(@watches)
   end
 
   # @url v1/users/top_users/
@@ -38,11 +39,11 @@ class V1::UsersController < V1::ApplicationController
   # @params type [String] expected to be value of Item::ActiveRecord_Relation type attribute
   # @params number [Integer] number of users
   #
-  # Return user
+  # Return collection top reader users
   #
-  # @response [Json] Lease and Item details
+  # @response [Json]
   def top_users
-    @users = User.top_users(params[:type], params[:number])
+    @users = User.top_users(params[:type])
     @users = paginate(@users)
   end
 end

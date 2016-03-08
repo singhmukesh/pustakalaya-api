@@ -30,12 +30,11 @@ class User < ApplicationRecord
   # Provides the collection of users
   #
   # @params item_type [String] expected to be value of Item::ActiveRecord_Relation type attribute
-  # @params number [Integer] number of user
   #
   # @return [User::ActiveRecord_Relation Collection]
-  def self.top_users(type = Book.to_s, number = 1)
+  def self.top_users(type = Book.to_s)
     raise ActiveRecord::StatementInvalid unless [Book.to_s, Device.to_s].include? type
-    self.joins(leases: :item).group('leases.user_id').order('count(leases.user_id) desc').where("items.type = '#{type}'").limit(number)
+    self.joins(leases: :item).group('leases.user_id').order('count(leases.user_id) desc').where("items.type = '#{type}'")
   end
 
   class << self

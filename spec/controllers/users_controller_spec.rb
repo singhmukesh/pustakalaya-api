@@ -64,7 +64,7 @@ RSpec.describe V1::UsersController, type: :controller do
       end
 
       it 'should assign all active device lease to @leases' do
-        expect(assigns(:leases)).to match_array [lease_device]
+        expect(assigns(:leases)).to eq [lease_device]
       end
     end
   end
@@ -109,7 +109,7 @@ RSpec.describe V1::UsersController, type: :controller do
 
     context 'when valid parameters are send' do
       before do
-        get :top_users, params: {type: Device.to_s, number: 2}
+        get :top_users, params: {type: Device.to_s, per_page: 2}
       end
 
       it 'should respond with status ok' do
@@ -117,7 +117,7 @@ RSpec.describe V1::UsersController, type: :controller do
       end
 
       it 'should provide top user of Device' do
-        expect(assigns(:users)).to match_array [@user1, @user2]
+        expect(assigns(:users)).to eq [@user1, @user2]
       end
     end
 

@@ -1,8 +1,7 @@
 class V1::ItemsController < V1::ApplicationController
   before_action :set_item, only: [:show, :change_status]
   before_action :filter, only: [:index, :inactivated]
-  before_action :set_number_of_records, only: [:most_rated, :most_leased]
-  after_action :paginate_item, only: [:leased, :most_rated, :most_leased]
+  after_action :paginate_items, only: [:leased, :most_rated, :most_leased]
 
   def index
     @items.ACTIVE
@@ -130,7 +129,7 @@ class V1::ItemsController < V1::ApplicationController
     end
   end
 
-  def paginate_item
+  def paginate_items
     @items = paginate(@items)
   end
 end
