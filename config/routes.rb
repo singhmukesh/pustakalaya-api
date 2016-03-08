@@ -14,6 +14,7 @@ Rails.application.routes.draw do
         get :inactivated
         get :leased
         get :most_rated
+        get :most_leased
       end
     end
     resources :books, only: [] do

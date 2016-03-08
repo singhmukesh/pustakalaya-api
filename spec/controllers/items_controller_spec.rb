@@ -235,32 +235,67 @@ RSpec.describe V1::ItemsController, type: :controller do
   end
 
   describe '#most_rated' do
-    let(:book1) { FactoryGirl.create(:book) }
-    let(:book2) { FactoryGirl.create(:book) }
+    let!(:kindle1) { FactoryGirl.create(:kindle) }
+    let!(:kindle2) { FactoryGirl.create(:kindle) }
 
     before do
       Rating.delete_all
-      FactoryGirl.create(:rating, value: 3, item: book1)
-      FactoryGirl.create(:rating, value: 4, item: book2)
+      FactoryGirl.create(:rating, value: 3, item: kindle1)
+      FactoryGirl.create(:rating, value: 4, item: kindle2)
     end
 
     context 'when valid parameters are send' do
       before do
-        get :most_rated, params: {type: Book.to_s}
+        get :most_rated, params: {type: Kindle.to_s, per_page: 1}
       end
 
       it 'should respond with status ok' do
         is_expected.to respond_with :ok
       end
 
-      it 'should provide top user of book' do
-        expect(assigns(:items)).to match_array [book2]
+      it 'should provide most rated book' do
+        expect(assigns(:items)).to match_array [kindle2]
       end
     end
 
     context 'when invalid parameter is send' do
       before do
         get :most_rated, params: {type: Faker::Lorem.word}
+      end
+
+      it 'should respond with status unprocessable_entity' do
+        is_expected.to respond_with :unprocessable_entity
+      end
+    end
+  end
+
+  describe '#most_leased' do
+    let(:book1) { FactoryGirl.create(:book, quantity: 3) }
+    let(:book2) { FactoryGirl.create(:book) }
+
+    before do
+      Lease.delete_all
+      FactoryGirl.create_list(:lease, 2, item: book1)
+      FactoryGirl.create(:lease, item: book2)
+    end
+
+    context 'when valid parameters are send' do
+      before do
+        get :most_leased, params: {type: Book.to_s, per_page: 1}
+      end
+
+      it 'should respond with status ok' do
+        is_expected.to respond_with :ok
+      end
+
+      it 'should provide most leased book' do
+        expect(assigns(:items)).to match_array [book1]
+      end
+    end
+
+    context 'when invalid parameter is send' do
+      before do
+        get :most_leased, params: {type: Faker::Lorem.word}
       end
 
       it 'should respond with status unprocessable_entity' do

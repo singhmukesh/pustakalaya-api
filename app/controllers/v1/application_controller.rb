@@ -34,7 +34,8 @@ class V1::ApplicationController < ActionController::Base
   private
 
   def paginate(collections)
-    collections.paginate(page: params[:page], per_page: params[:per_page]).order('created_at DESC')
+    set_number_of_records
+    collections.paginate(page: @page, per_page: @per_page).order('created_at DESC')
   end
 
   def unauthorized(error)
@@ -59,5 +60,10 @@ class V1::ApplicationController < ActionController::Base
 
   def record_not_found(error)
     render json: {message: error.message}, status: :not_found
+  end
+
+  def set_number_of_records
+    @page = (params[:page] || 1).to_i
+    @per_page = (params[:per_page] || WillPaginate.per_page).to_i
   end
 end

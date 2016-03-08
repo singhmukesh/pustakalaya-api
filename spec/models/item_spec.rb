@@ -80,7 +80,7 @@ RSpec.describe Item, type: :model do
     end
 
     it 'should provide Book with highest rating' do
-      expect(Item.most_rated).to match_array [book1]
+      expect(Item.most_rated).to eq [book1, book2]
     end
   end
 
@@ -96,7 +96,7 @@ RSpec.describe Item, type: :model do
       end
 
       it 'should provide most leased Book' do
-        expect(Item.most_leased(Book.to_s)).to match_array [book1]
+        expect(Item.most_leased(Book.to_s)).to eq [book1, book2]
       end
     end
 
@@ -110,7 +110,7 @@ RSpec.describe Item, type: :model do
       end
 
       it 'should provide most leased Book' do
-        expect(Item.most_leased(Device.to_s)).to match_array [device1]
+        expect(Item.most_leased(Device.to_s)).to eq [device1, device2]
       end
     end
   end
