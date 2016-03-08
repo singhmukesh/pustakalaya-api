@@ -92,4 +92,43 @@ RSpec.describe V1::UsersController, type: :controller do
       expect(assigns(:watches)).to match_array [@watch1, @watch2]
     end
   end
+
+  describe '#top_users' do
+    before do
+      @user1 = FactoryGirl.create(:user)
+      @user2 = FactoryGirl.create(:user)
+      @user3 = FactoryGirl.create(:user)
+
+      FactoryGirl.create_list(:lease, 3, user: @user1)
+      FactoryGirl.create_list(:lease, 2, user: @user2)
+      FactoryGirl.create(:lease, user: @user3)
+
+      FactoryGirl.create(:lease, :lease_book, user: @user1)
+      FactoryGirl.create_list(:lease, 2, :lease_book, user: @user2)
+    end
+
+    context 'when valid parameters are send' do
+      before do
+        get :top_users, params: {type: Device.to_s, number: 2}
+      end
+
+      it 'should respond with status ok' do
+        is_expected.to respond_with :ok
+      end
+
+      it 'should provide top user of Device' do
+        expect(assigns(:users)).to match_array [@user1, @user2]
+      end
+    end
+
+    context 'when invalid parameter is send' do
+      before do
+        get :top_users, params: {type: Faker::Lorem.word}
+      end
+
+      it 'should respond with status unprocessable_entity' do
+        is_expected.to respond_with :unprocessable_entity
+      end
+    end
+  end
 end

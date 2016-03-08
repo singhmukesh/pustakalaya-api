@@ -35,6 +35,7 @@ Rails.application.routes.draw do
         get :info
         get :leases
         get :watches
+        get :top_users
       end
     end
     resources :categories, only: [:index]
