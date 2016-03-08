@@ -36,4 +36,37 @@ class Item < ApplicationRecord
     return 0 if count == 0
     self.ratings.sum(:value)/count
   end
+
+  class <<self
+    # Provides whether item is rateable or not
+    #
+    # @params type [Item::ActiveRecord_Relation type attribute]
+    #
+    # @return [Boolean]
+    def rateable?(type)
+      case type
+      when Book.to_s
+        true
+      when Device.to_s
+        false
+      when Kindle.to_s
+        true
+      else
+        false
+      end
+    end
+  end
+
+  class << self
+    # Provides the collection of items
+    #
+    # @params type [String] expected to be value of Item::ActiveRecord_Relation type attribute
+    # @params number [Integer] number of item
+    #
+    # @return [Item::ActiveRecord_Relation Collection]
+    def most_rated(type = Book.to_s, number = 1)
+      raise ActiveRecord::StatementInvalid unless Item.rateable?(type)
+      self.joins(:ratings).group('ratings.item_id').order('avg(ratings.value) desc').ACTIVE.limit(number)
+    end
+  end
 end

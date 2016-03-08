@@ -41,4 +41,32 @@ RSpec.describe Item, type: :model do
       end
     end
   end
+
+  describe '.rateable?' do
+    context 'when item is Book' do
+      it { expect(Item.rateable?(Book.to_s)).to be_truthy }
+    end
+
+    context 'when item is Device' do
+      it { expect(Item.rateable?(Device.to_s)).to be_falsey }
+    end
+
+    context 'when item is Kindle' do
+      it { expect(Item.rateable?(Kindle.to_s)).to be_truthy }
+    end
+  end
+
+  describe '.most_rated' do
+    let(:book1) { FactoryGirl.create(:book) }
+    let(:book2) { FactoryGirl.create(:book) }
+
+    before do
+      FactoryGirl.create(:rating, value: 4, item: book1)
+      FactoryGirl.create(:rating, value: 3, item: book2)
+    end
+
+    it 'should provide Book with highest rating' do
+      expect(Item.most_rated).to match_array [book1]
+    end
+  end
 end

@@ -43,5 +43,6 @@ class V1::UsersController < V1::ApplicationController
   # @response [Json] Lease and Item details
   def top_users
     @users = User.top_users(params[:type], params[:number])
+    @users = paginate(@users)
   end
 end
