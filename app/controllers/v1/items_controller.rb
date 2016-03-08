@@ -51,6 +51,20 @@ class V1::ItemsController < V1::ApplicationController
     @items = paginate(@items)
   end
 
+  # @url v1/items/most_rated/
+  # @action GET
+  #
+  # @params type [String] expected to be value of Item::ActiveRecord_Relation type attribute
+  # @params number [Integer] number of items
+  #
+  # Return Item
+  #
+  # @response [Json] Lease and Item details
+  def most_rated
+    @items = Item.most_rated(params[:type], params[:number])
+    @items = paginate(@items)
+  end
+
   private
 
   def item_params

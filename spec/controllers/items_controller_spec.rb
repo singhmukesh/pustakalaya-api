@@ -233,4 +233,39 @@ RSpec.describe V1::ItemsController, type: :controller do
       end
     end
   end
+
+  describe '#most_rated' do
+    let(:book1) { FactoryGirl.create(:book) }
+    let(:book2) { FactoryGirl.create(:book) }
+
+    before do
+      Rating.delete_all
+      FactoryGirl.create(:rating, value: 3, item: book1)
+      FactoryGirl.create(:rating, value: 4, item: book2)
+    end
+
+    context 'when valid parameters are send' do
+      before do
+        get :most_rated, params: {type: Book.to_s}
+      end
+
+      it 'should respond with status ok' do
+        is_expected.to respond_with :ok
+      end
+
+      it 'should provide top user of book' do
+        expect(assigns(:items)).to match_array [book2]
+      end
+    end
+
+    context 'when invalid parameter is send' do
+      before do
+        get :most_rated, params: {type: Faker::Lorem.word}
+      end
+
+      it 'should respond with status unprocessable_entity' do
+        is_expected.to respond_with :unprocessable_entity
+      end
+    end
+  end
 end
