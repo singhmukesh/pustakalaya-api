@@ -5,3 +5,5 @@ json.users do
     json.partial! 'v1/users/detail', user: user
   end
 end
+
+json.partial! 'v1/shared/pagination', collection: users
