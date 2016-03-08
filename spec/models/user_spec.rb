@@ -100,4 +100,44 @@ RSpec.describe User, type: :model do
       end
     end
   end
+
+  describe '.top_users' do
+    before do
+      @user1 = FactoryGirl.create(:user)
+      @user2 = FactoryGirl.create(:user)
+      @user3 = FactoryGirl.create(:user)
+
+      FactoryGirl.create_list(:lease, 3, user: @user1)
+      FactoryGirl.create_list(:lease, 2, user: @user2)
+      FactoryGirl.create(:lease, user: @user3)
+
+      FactoryGirl.create(:lease, :lease_book, user: @user1)
+      FactoryGirl.create_list(:lease, 2, :lease_book, user: @user2)
+    end
+
+    context 'when item type is not defined' do
+      it 'should provide top user of Book' do
+        expect(User.top_users).to match_array [@user2]
+      end
+    end
+
+    context 'when item type is Book' do
+      it 'should provide top user of Book' do
+        expect(User.top_users(Book.to_s)).to match_array [@user2]
+      end
+    end
+
+    context 'when item type is Device' do
+      context 'when number parameter is not defined' do
+        it 'should provide top user of Device' do
+          expect(User.top_users(Device.to_s)).to match_array [@user1]
+        end
+      end
+      context 'when the number parameter is set as 2' do
+        it 'should provide the top two users of Device' do
+          expect(User.top_users(Device.to_s, 2)).to match_array [@user1, @user2]
+        end
+      end
+    end
+  end
 end

@@ -27,6 +27,17 @@ class User < ApplicationRecord
     watches.ACTIVE.find_by(item_id: item_id).present?
   end
 
+  # Provides the collection of users
+  #
+  # @params item_type [String] expected to be value of Item::ActiveRecord_Relation type attribute
+  # @params number [Integer] number of user
+  #
+  # @return [User::ActiveRecord_Relation Collection]
+  def self.top_users(type = Book.to_s, number = 1)
+    raise ActiveRecord::StatementInvalid unless defined? type
+    self.joins(leases: :item).group('leases.user_id').order('count(leases.user_id) desc').where("items.type = '#{type}'").limit(number)
+  end
+
   class << self
     # Verify whether the user details is present in system database and if not present create the new user with available details
     #
