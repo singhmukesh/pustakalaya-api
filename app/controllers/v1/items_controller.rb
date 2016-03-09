@@ -48,6 +48,7 @@ class V1::ItemsController < V1::ApplicationController
   #
   # @response [Json]
   def leased
+    authorize Item
     @items = Item.where(id: leased_item_ids)
   end
 

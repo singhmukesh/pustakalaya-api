@@ -6,7 +6,7 @@ RSpec.describe ItemPolicy do
   let(:admin) { FactoryGirl.create(:user, :role_admin) }
   let(:item) { FactoryGirl.build(:book) }
 
-  permissions :create?, :change_status? do
+  permissions :create?, :change_status?, :leased? do
     it 'should not allow user' do
       expect(subject).not_to permit(user, item)
     end
