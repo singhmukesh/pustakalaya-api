@@ -4,7 +4,6 @@ class V1::UsersController < V1::ApplicationController
   # @action GET
   #
   # @params type [String] expected to be value of Item::ActiveRecord_Relation type attribute
-  # @params number [Integer] number of users
   #
   # Return user by ranking by number of leases
   #
