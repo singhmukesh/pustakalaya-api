@@ -9,7 +9,7 @@ class V1::UsersController < V1::ApplicationController
   #
   # @response [Json]
   def ranking
-    @users = User.top_leasers(params[:type])
+    @users = User.with_most_leases(params[:type])
     @users = paginate(@users)
   end
 

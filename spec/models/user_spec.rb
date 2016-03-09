@@ -101,7 +101,7 @@ RSpec.describe User, type: :model do
     end
   end
 
-  describe '.top_leasers' do
+  describe '.with_most_leases' do
     before do
       @user1 = FactoryGirl.create(:user)
       @user2 = FactoryGirl.create(:user)
@@ -117,19 +117,19 @@ RSpec.describe User, type: :model do
 
     context 'when item type is not defined' do
       it 'should provide top user of Book' do
-        expect(User.top_leasers).to eq [@user2, @user1]
+        expect(User.with_most_leases).to eq [@user2, @user1]
       end
     end
 
     context 'when item type is Book' do
       it 'should provide top user of Book' do
-        expect(User.top_leasers(Book.to_s)).to eq [@user2, @user1]
+        expect(User.with_most_leases(Book.to_s)).to eq [@user2, @user1]
       end
     end
 
     context 'when item type is Device' do
       it 'should provide top user of Device' do
-        expect(User.top_leasers(Device.to_s)).to eq [@user1, @user2, @user3]
+        expect(User.with_most_leases(Device.to_s)).to eq [@user1, @user2, @user3]
       end
     end
   end
