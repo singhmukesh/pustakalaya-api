@@ -36,7 +36,7 @@ class V1::ApplicationController < ActionController::Base
   def paginate(collections)
     page = (params[:page] || 1).to_i
     per_page = (params[:per_page] || WillPaginate.per_page).to_i
-    collections.paginate(page: page, per_page: per_page).order('created_at DESC')
+    collections.paginate(page: page, per_page: per_page).order(Constant::DEFAULT_ORDER)
   end
 
   def unauthorized(error)
