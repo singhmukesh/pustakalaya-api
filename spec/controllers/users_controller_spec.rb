@@ -8,6 +8,45 @@ RSpec.describe V1::UsersController, type: :controller do
     controller.instance_variable_set(:@current_user, user)
   end
 
+  describe '#ranking' do
+    before do
+      @user1 = FactoryGirl.create(:user)
+      @user2 = FactoryGirl.create(:user)
+      @user3 = FactoryGirl.create(:user)
+
+      FactoryGirl.create_list(:lease, 3, user: @user1)
+      FactoryGirl.create_list(:lease, 2, user: @user2)
+      FactoryGirl.create(:lease, user: @user3)
+
+      FactoryGirl.create(:lease, :lease_book, user: @user1)
+      FactoryGirl.create_list(:lease, 2, :lease_book, user: @user2)
+    end
+
+    context 'when valid parameters are send' do
+      before do
+        get :ranking, params: {type: Device.to_s, per_page: 2}
+      end
+
+      it 'should respond with status ok' do
+        is_expected.to respond_with :ok
+      end
+
+      it 'should provide top user of Device' do
+        expect(assigns(:users)).to eq [@user1, @user2]
+      end
+    end
+
+    context 'when invalid parameter is send' do
+      before do
+        get :ranking, params: {type: Faker::Lorem.word}
+      end
+
+      it 'should respond with status unprocessable_entity' do
+        is_expected.to respond_with :unprocessable_entity
+      end
+    end
+  end
+
   describe '#info' do
     before do
       get :info
@@ -64,7 +103,7 @@ RSpec.describe V1::UsersController, type: :controller do
       end
 
       it 'should assign all active device lease to @leases' do
-        expect(assigns(:leases)).to match_array [lease_device]
+        expect(assigns(:leases)).to eq [lease_device]
       end
     end
   end

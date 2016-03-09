@@ -12,7 +12,9 @@ Rails.application.routes.draw do
       end
       collection do
         get :inactivated
-        get 'leased'
+        get :leased
+        get :most_rated
+        get :most_leased
       end
     end
     resources :books, only: [] do
@@ -35,6 +37,7 @@ Rails.application.routes.draw do
         get :info
         get :leases
         get :watches
+        get :ranking
       end
     end
     resources :categories, only: [:index]

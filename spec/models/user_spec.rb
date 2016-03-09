@@ -100,4 +100,37 @@ RSpec.describe User, type: :model do
       end
     end
   end
+
+  describe '.with_most_leases' do
+    before do
+      @user1 = FactoryGirl.create(:user)
+      @user2 = FactoryGirl.create(:user)
+      @user3 = FactoryGirl.create(:user)
+
+      FactoryGirl.create_list(:lease, 3, user: @user1)
+      FactoryGirl.create_list(:lease, 2, user: @user2)
+      FactoryGirl.create(:lease, user: @user3)
+
+      FactoryGirl.create(:lease, :lease_book, user: @user1)
+      FactoryGirl.create_list(:lease, 2, :lease_book, user: @user2)
+    end
+
+    context 'when item type is not defined' do
+      it 'should provide top user of Book' do
+        expect(User.with_most_leases).to eq [@user2, @user1]
+      end
+    end
+
+    context 'when item type is Book' do
+      it 'should provide top user of Book' do
+        expect(User.with_most_leases(Book.to_s)).to eq [@user2, @user1]
+      end
+    end
+
+    context 'when item type is Device' do
+      it 'should provide top user of Device' do
+        expect(User.with_most_leases(Device.to_s)).to eq [@user1, @user2, @user3]
+      end
+    end
+  end
 end

@@ -1,6 +1,7 @@
 class V1::ItemsController < V1::ApplicationController
   before_action :set_item, only: [:show, :change_status]
   before_action :filter, only: [:index, :inactivated]
+  after_action :paginate_items, only: [:leased, :most_rated, :most_leased]
 
   def index
     @items.ACTIVE
@@ -47,8 +48,32 @@ class V1::ItemsController < V1::ApplicationController
   #
   # @response [Json]
   def leased
+    authorize Item
     @items = Item.where(id: leased_item_ids)
-    @items = paginate(@items)
+  end
+
+  # @url v1/items/most_rated/
+  # @action GET
+  #
+  # @params type [String] expected to be value of Item::ActiveRecord_Relation type attribute
+  #
+  # Return most rated item
+  #
+  # @response [Json] Item details
+  def most_rated
+    @items = Item.most_rated(params[:type])
+  end
+
+  # @url v1/items/most_leased/
+  # @action GET
+  #
+  # @params type [String] expected to be value of Item::ActiveRecord_Relation type attribute
+  #
+  # Return most leased item
+  #
+  # @response [Json] Item details
+  def most_leased
+    @items = Item.most_leased(params[:type])
   end
 
   private
@@ -69,7 +94,7 @@ class V1::ItemsController < V1::ApplicationController
     listing
     @items = @collection.ransack({'s' => params[:sort], @search_key => params[:search]}).result
     @items = @items.find_by_category(params[:category_id]) if params[:category_id].present?
-    @items = paginate(@items)
+    paginate_items
   end
 
   def listing
@@ -103,5 +128,9 @@ class V1::ItemsController < V1::ApplicationController
     else
       Lease.ACTIVE.pluck(:item_id).uniq
     end
+  end
+
+  def paginate_items
+    @items = paginate(@items)
   end
 end
