@@ -33,6 +33,7 @@ class User < ApplicationRecord
   #
   # @return [User::ActiveRecord_Relation Collection]
   def self.with_most_leases(type = Book.to_s)
+    type ||= Book.to_s
     raise ActiveRecord::StatementInvalid unless [Book.to_s, Device.to_s].include? type
     self.joins(leases: :item).group('leases.user_id').order('count(leases.user_id) desc').where('items.type = ?', type)
   end
