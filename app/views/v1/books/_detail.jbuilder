@@ -6,7 +6,7 @@ end
 
 json.partial! 'v1/categories/list', item: book
 
-json.available book.available?.to_s
+json.available book.available?
 
 json.lease @current_user.leased? book.id
 
