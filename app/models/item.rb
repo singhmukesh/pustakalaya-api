@@ -79,7 +79,7 @@ class Item < ApplicationRecord
     # @return [Item::ActiveRecord_Relation Collection]
     def most_rated(type = Book.to_s)
       raise ActiveRecord::StatementInvalid unless Item.rateable?(type)
-      joins(:ratings).group('ratings.item_id').order('avg(ratings.value) desc').ACTIVE.where("type = '#{type}'")
+      joins(:ratings).group('ratings.item_id').order('avg(ratings.value) desc').ACTIVE.where('type = ?', type)
     end
 
     # Provides the collection of most leased items
@@ -89,7 +89,7 @@ class Item < ApplicationRecord
     # @return [Item::ActiveRecord_Relation Collection]
     def most_leased(type = Book.to_s)
       raise ActiveRecord::StatementInvalid unless Item.leaseable?(type)
-     self.joins(:leases).group('leases.item_id').order('count(leases.item_id) desc').ACTIVE.where("type = '#{type}'")
+      self.joins(:leases).group('leases.item_id').order('count(leases.item_id) desc').ACTIVE.where('type = ?', type)
     end
   end
 end
