@@ -33,7 +33,7 @@ RSpec.describe V1::LeasesController, type: :controller do
     context 'when lease attributes are invalid' do
       before do
         @lease_count = Lease.count
-        post :create, params: {lease: FactoryGirl.attributes_for(:lease, issue_date: Time.current - 3.days, item_id: device.id)}
+        post :create, params: {lease: FactoryGirl.attributes_for(:lease, issued_date: Time.current - 3.days, item_id: device.id)}
       end
 
       it 'should respond with status unprocessable_entity' do

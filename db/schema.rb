@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160303042754) do
+ActiveRecord::Schema.define(version: 20160309074712) do
 
   create_table "categories", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "title",      null: false
@@ -42,7 +42,7 @@ ActiveRecord::Schema.define(version: 20160303042754) do
   end
 
   create_table "leases", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.datetime "issue_date",              null: false
+    t.datetime "issued_date",             null: false
     t.datetime "due_date",                null: false
     t.datetime "return_date"
     t.integer  "status",      default: 0, null: false

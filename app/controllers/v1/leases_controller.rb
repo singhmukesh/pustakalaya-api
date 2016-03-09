@@ -26,7 +26,7 @@ class V1::LeasesController < V1::ApplicationController
   private
 
   def lease_params
-    params.require(:lease).permit(:id, :issue_date, :due_date, :item_id)
+    params.require(:lease).permit(:id, :issued_date, :due_date, :item_id)
   end
 
   def item_unavailable(error)

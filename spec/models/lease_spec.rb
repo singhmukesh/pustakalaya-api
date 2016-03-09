@@ -15,7 +15,7 @@ RSpec.describe Lease, type: :model do
   end
 
   describe 'presence' do
-    it { is_expected.to validate_presence_of(:issue_date) }
+    it { is_expected.to validate_presence_of(:issued_date) }
     it { is_expected.to validate_presence_of(:due_date) }
     it { is_expected.to validate_absence_of(:return_date).on(:create) }
     it { is_expected.to validate_numericality_of(:renew_count).is_less_than_or_equal_to(ENV['MAX_TIME_FOR_RENEW'].to_i) }
@@ -24,9 +24,9 @@ RSpec.describe Lease, type: :model do
   describe 'validation issue date and due date for device lease' do
     context 'when issue date time is past' do
       it 'should be invalid' do
-        lease = FactoryGirl.build(:lease, issue_date: Time.current - 1.hours)
+        lease = FactoryGirl.build(:lease, issued_date: Time.current - 1.hours)
         lease.valid?
-        expect(lease.errors[:issue_date].size).to eq(1)
+        expect(lease.errors[:issued_date].size).to eq(1)
       end
     end
 
@@ -36,15 +36,15 @@ RSpec.describe Lease, type: :model do
       end
 
       it 'should be valid' do
-        lease = FactoryGirl.build(:lease, issue_date: Time.current + 1.hours)
+        lease = FactoryGirl.build(:lease, issued_date: Time.current + 1.hours)
         lease.valid?
-        expect(lease.errors[:issue_date].size).to eq(0)
+        expect(lease.errors[:issued_date].size).to eq(0)
       end
     end
 
     context 'when due date time is past' do
       it 'should be valid' do
-        lease = FactoryGirl.build(:lease, issue_date: Time.current + 1.hours, due_date: Time.current + 2.hours)
+        lease = FactoryGirl.build(:lease, issued_date: Time.current + 1.hours, due_date: Time.current + 2.hours)
         lease.valid?
         expect(lease.errors[:due_date].size).to eq(0)
       end
@@ -56,7 +56,7 @@ RSpec.describe Lease, type: :model do
       end
 
       it 'should be invalid' do
-        lease = FactoryGirl.build(:lease, issue_date: Time.current - 2.hours, due_date: Time.current - 1.hours)
+        lease = FactoryGirl.build(:lease, issued_date: Time.current - 2.hours, due_date: Time.current - 1.hours)
         lease.valid?
         expect(lease.errors[:due_date].size).to eq(1)
       end
@@ -64,13 +64,13 @@ RSpec.describe Lease, type: :model do
 
     context 'when due date is past date compared to issue date' do
       it 'should be raise exception CustomException::ItemUnavailable' do
-        expect { FactoryGirl.create(:lease, issue_date: Time.current + 2.hours, due_date: Time.current + 1.hours) }.to raise_exception CustomException::ItemUnavailable
+        expect { FactoryGirl.create(:lease, issued_date: Time.current + 2.hours, due_date: Time.current + 1.hours) }.to raise_exception CustomException::ItemUnavailable
       end
     end
 
     context 'when issue date and due date have date difference more than specified' do
       it 'should be invalid' do
-        lease = FactoryGirl.build(:lease, issue_date: Time.current, due_date: Time.current + (ENV['MAX_DEVICE_LEASE_DAYS'].to_i + 1).days)
+        lease = FactoryGirl.build(:lease, issued_date: Time.current, due_date: Time.current + (ENV['MAX_DEVICE_LEASE_DAYS'].to_i + 1).days)
         lease.valid?
         expect(lease.errors[:due_date][0]).to eq(I18n.t('validation.invalid_date'))
       end
@@ -90,12 +90,12 @@ RSpec.describe Lease, type: :model do
   context 'when book lease request for not available book' do
     it 'should be raise exception CustomException::ItemUnavailable' do
       number_of_device = 2
-      issue_date = Time.current + 2.hours
+      issued_date = Time.current + 2.hours
       due_date = Time.current + 3.hours
       device = FactoryGirl.create(:device, quantity: number_of_device)
-      FactoryGirl.create_list(:lease, number_of_device, item_id: device.id, issue_date: issue_date, due_date: due_date)
+      FactoryGirl.create_list(:lease, number_of_device, item_id: device.id, issued_date: issued_date, due_date: due_date)
 
-      expect { FactoryGirl.create(:lease, item_id: device.id, issue_date: issue_date, due_date: due_date) }.to raise_exception CustomException::ItemUnavailable
+      expect { FactoryGirl.create(:lease, item_id: device.id, issued_date: issued_date, due_date: due_date) }.to raise_exception CustomException::ItemUnavailable
     end
   end
 

@@ -35,7 +35,7 @@ en:
     item_not_reviewable: Item is not reviewable
   user_mailer:
     note_the_following_date: Please note the following dates.
-    issue_date: Issue date
+    issued_date: Issue date
     due_date: Due date
     return_date: Return date
     lease:
