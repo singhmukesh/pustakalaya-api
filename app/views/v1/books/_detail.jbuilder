@@ -13,7 +13,7 @@ json.lease @current_user.leased? book.id
 json.watch @current_user.watched? book.id
 
 json.leases do
-  json.array! book.leases.ACTIVE.each do |lease|
+  json.array! book.leases.ACTIVE.order(Constant::DEFAULT_ORDER) do |lease|
     json.partial! 'v1/leases/detail', lease: lease
   end
 end
@@ -21,8 +21,7 @@ end
 json.partial! 'v1/ratings/detail', item: book
 
 json.reviews do
-  json.array! book.reviews.each do |review|
+  json.array! book.reviews.order(Constant::DEFAULT_ORDER) do |review|
     json.partial! 'v1/reviews/detail', review: review
   end
 end
-
