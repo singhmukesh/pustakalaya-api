@@ -29,7 +29,7 @@ gem 'will_paginate', '~> 3.1.0'
 gem 'sidekiq', '~> 4.1.0'
 # Dependency for sidekiq
 gem 'sinatra', github: 'sinatra/sinatra', branch: 'master', require: nil
-
+# Rack Middleware for handling Cross-Origin Resource Sharing
 gem 'rack-cors', require: 'rack/cors'
 
 group :development, :test do
