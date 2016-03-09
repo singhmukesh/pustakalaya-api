@@ -62,7 +62,4 @@ class V1::ApplicationController < ActionController::Base
   def record_not_found(error)
     render json: {message: error.message}, status: :not_found
   end
-
-  def set_page_params
-  end
 end
