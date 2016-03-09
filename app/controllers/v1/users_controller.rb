@@ -1,5 +1,19 @@
 class V1::UsersController < V1::ApplicationController
 
+  # @url v1/users/ranking/
+  # @action GET
+  #
+  # @params type [String] expected to be value of Item::ActiveRecord_Relation type attribute
+  # @params number [Integer] number of users
+  #
+  # Return user by ranking by number of leases
+  #
+  # @response [Json]
+  def ranking
+    @users = User.top_leasers(params[:type])
+    @users = paginate(@users)
+  end
+
   # @url v1/users/info
   # @action GET
   #
@@ -31,19 +45,5 @@ class V1::UsersController < V1::ApplicationController
   def watches
     @watches = current_user.watches.ACTIVE
     @watches = paginate(@watches)
-  end
-
-  # @url v1/users/top_users/
-  # @action GET
-  #
-  # @params type [String] expected to be value of Item::ActiveRecord_Relation type attribute
-  # @params number [Integer] number of users
-  #
-  # Return collection top reader users
-  #
-  # @response [Json]
-  def top_users
-    @users = User.top_users(params[:type])
-    @users = paginate(@users)
   end
 end
