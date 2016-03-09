@@ -93,7 +93,7 @@ class V1::ItemsController < V1::ApplicationController
     listing
     @items = @collection.ransack({'s' => params[:sort], @search_key => params[:search]}).result
     @items = @items.find_by_category(params[:category_id]) if params[:category_id].present?
-    paginate_item
+    paginate_items
   end
 
   def listing
