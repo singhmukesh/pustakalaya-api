@@ -30,6 +30,15 @@ module PustakalayaApi
     # config for auto load path
     config.autoload_paths << Rails.root.join('lib')
 
+    #for rack-cors
+    config.middleware.insert_before 0, "Rack::Cors" do
+      allow do
+        origins '*'
+        resource '*', headers: :any, methods: [:get, :post, :options]
+        resource 'public/*', headers: :any, methods: :get
+      end
+    end
+
     # set per_page globally
     DEFAULT_PER_PAGE = 10
     WillPaginate.per_page = DEFAULT_PER_PAGE

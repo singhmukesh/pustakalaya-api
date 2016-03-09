@@ -30,6 +30,8 @@ gem 'sidekiq', '~> 4.1.0'
 # Dependency for sidekiq
 gem 'sinatra', github: 'sinatra/sinatra', branch: 'master', require: nil
 
+gem 'rack-cors', require: 'rack/cors'
+
 group :development, :test do
   # Call 'binding.pry' anywhere in the code to stop execution and get a debugger console
   gem 'pry-rails', '~> 0.3.4'
