@@ -1,6 +1,6 @@
 class V1::ItemsController < V1::ApplicationController
   before_action :set_item, only: [:show, :change_status]
-  before_action :authorize_item, only: [:create, :change_status, :leased]
+  before_action :authorize_item, only: [:create, :change_status]
   before_action :filter, only: [:index, :inactivated]
 
   def index
@@ -37,17 +37,6 @@ class V1::ItemsController < V1::ApplicationController
   # @response [Json]
   def change_status
     @item.update({status: Item.statuses[status]})
-  end
-
-  # @url v1/items/leased
-  # @action GET
-  #
-  # Provides listing of leased items
-  #
-  # @response [Json]
-  def leased
-    @items = Item.where(id: leased_item_ids)
-    @items = paginate(@items)
   end
 
   # @url v1/items/most_rated/

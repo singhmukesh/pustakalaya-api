@@ -1,9 +1,4 @@
 Rails.application.routes.draw do
-
-  namespace :v1 do
-    get 'books/available'
-  end
-
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   namespace :v1, defaults: {format: :json} do
     resources :items, only: [:index, :create, :show] do
@@ -12,19 +7,18 @@ Rails.application.routes.draw do
       end
       collection do
         get :inactivated
-        get :leased
         get :most_rated
         get :most_leased
       end
     end
     resources :books, only: [] do
       collection do
-        get 'available'
+        get :available
       end
     end
-    resources :leases, only: [:create] do
+    resources :leases, only: [:index, :create] do
       collection do
-        post 'return'
+        post :return
       end
     end
     resources :watches, only: [:create] do

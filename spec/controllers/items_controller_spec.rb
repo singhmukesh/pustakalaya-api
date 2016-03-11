@@ -189,51 +189,6 @@ RSpec.describe V1::ItemsController, type: :controller do
     end
   end
 
-  describe '#leased' do
-    before do
-      @book1, @book2, @book3 = FactoryGirl.create_list(:book, 3)
-      @device1 = FactoryGirl.create(:device)
-      @device2 = FactoryGirl.create(:device)
-
-      FactoryGirl.create_list(:lease, @book1.quantity, item: @book1)
-      FactoryGirl.create(:lease, item: @book2)
-      FactoryGirl.create(:lease, item: @device1)
-    end
-
-    context 'when params type is undefined' do
-      before do
-        get :leased
-      end
-
-      it { is_expected.to respond_with :ok }
-      it 'should list leased items' do
-        expect(assigns(:items)).to match_array [@book1, @book2, @device1]
-      end
-    end
-
-    context 'when params type is book' do
-      before do
-        get :leased, type: Book.to_s
-      end
-
-      it { is_expected.to respond_with :ok }
-      it 'should list leased books' do
-        expect(assigns(:items)).to match_array [@book1, @book2]
-      end
-    end
-
-    context 'when params type is device' do
-      before do
-        get :leased, type: Device.to_s
-      end
-
-      it { is_expected.to respond_with :ok }
-      it 'should list leased devices' do
-        expect(assigns(:items)).to match_array [@device1]
-      end
-    end
-  end
-
   describe '#most_rated' do
     let!(:kindle1) { FactoryGirl.create(:kindle) }
     let!(:kindle2) { FactoryGirl.create(:kindle) }
