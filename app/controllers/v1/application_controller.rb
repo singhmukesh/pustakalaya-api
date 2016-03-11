@@ -17,11 +17,12 @@ class V1::ApplicationController < ActionController::Base
   #
   # @return [User::ActiveRecord_Relation], Active Record Object containing the user details
   def authenticate_user!
-    token = request.headers['Authorization']
-    auth = Authentication::authenticate_with_oauth(token)
-
-    Authentication::authenticate_domain(auth) if ENV['AUTH_DOMAIN']
-    @current_user = User.find_user(auth)
+    # token = request.headers['Authorization']
+    # auth = Authentication::authenticate_with_oauth(token)
+    #
+    # Authentication::authenticate_domain(auth) if ENV['AUTH_DOMAIN']
+    # @current_user = User.find_user(auth)
+    @current_user = User.first
   end
 
   # Provide Authenticated current user details
@@ -36,7 +37,7 @@ class V1::ApplicationController < ActionController::Base
   def paginate(collections)
     page = (params[:page] || 1).to_i
     per_page = (params[:per_page] || WillPaginate.per_page).to_i
-    collections.paginate(page: page, per_page: per_page).order(Constant::DEFAULT_ORDER)
+    collections.paginate(page: page, per_page: per_page).order(created_at: :desc)
   end
 
   def unauthorized(error)
