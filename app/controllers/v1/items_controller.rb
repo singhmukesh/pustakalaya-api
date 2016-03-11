@@ -1,10 +1,10 @@
 class V1::ItemsController < V1::ApplicationController
   before_action :set_item, only: [:show, :change_status]
+  before_action :authorize_item, only: [:create, :change_status, :leased]
   before_action :filter, only: [:index, :inactivated]
-  after_action :paginate_items, only: [:leased, :most_rated, :most_leased]
 
   def index
-    @items.ACTIVE
+    @items = @items.ACTIVE
   end
 
   # @url v1/items/inactivated
@@ -19,7 +19,6 @@ class V1::ItemsController < V1::ApplicationController
   end
 
   def create
-    authorize Item
     @item = Item.new(item_params)
     @item.save!
   end
@@ -37,7 +36,6 @@ class V1::ItemsController < V1::ApplicationController
   #
   # @response [Json]
   def change_status
-    authorize Item
     @item.update({status: Item.statuses[status]})
   end
 
@@ -48,8 +46,8 @@ class V1::ItemsController < V1::ApplicationController
   #
   # @response [Json]
   def leased
-    authorize Item
     @items = Item.where(id: leased_item_ids)
+    @items = paginate(@items)
   end
 
   # @url v1/items/most_rated/
@@ -62,6 +60,7 @@ class V1::ItemsController < V1::ApplicationController
   # @response [Json] Item details
   def most_rated
     @items = Item.most_rated(params[:type])
+    @items = paginate(@items)
   end
 
   # @url v1/items/most_leased/
@@ -74,9 +73,14 @@ class V1::ItemsController < V1::ApplicationController
   # @response [Json] Item details
   def most_leased
     @items = Item.most_leased(params[:type])
+    @items = paginate(@items)
   end
 
   private
+
+  def authorize_item
+    authorize Item
+  end
 
   def item_params
     params.require(:item).permit(:id, :name, :code, :quantity, :description, :image, :status, :type, category_ids: [], publish_detail_attributes: [:id, :item_id, :isbn, :author, :publish_date])
