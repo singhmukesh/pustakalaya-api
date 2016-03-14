@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe V1::AuthorsController, type: :controller do
   let(:user) { FactoryGirl.create(:user) }
-  
+
   before do
     allow(controller).to receive(:authenticate_user!)
     controller.instance_variable_set(:@current_user, user)

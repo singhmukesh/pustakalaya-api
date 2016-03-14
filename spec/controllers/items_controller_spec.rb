@@ -59,6 +59,95 @@ RSpec.describe V1::ItemsController, type: :controller do
     end
   end
 
+  describe '#show' do
+    context 'when showing existing record' do
+      before do
+        get :show, id: book
+      end
+
+      it 'should respond with status ok' do
+        is_expected.to respond_with :ok
+      end
+
+      it 'should assign book to @item' do
+        expect(assigns(:item)).to eq book
+      end
+    end
+
+    context 'when showing non existing record' do
+      before do
+        get :show, id: Item.last.id + 1
+      end
+
+      it { is_expected.to respond_with :not_found }
+      it { is_expected.to rescue_from ActiveRecord::RecordNotFound }
+    end
+  end
+
+  describe '#create' do
+    context 'when the user is not admin' do
+      before do
+        controller.instance_variable_set(:@current_user, user)
+
+        post :create, params: {item: FactoryGirl.attributes_for(:book)}
+      end
+
+      it 'should respond with status unauthorized' do
+        is_expected.to respond_with :unauthorized
+      end
+    end
+
+    context 'when the user is admin' do
+      before do
+        @book_count = Book.count
+
+        post :create, params: {item: FactoryGirl.attributes_for(:book, category_ids: [category.id], publish_detail_attributes: FactoryGirl.attributes_for(:publish_detail))}
+      end
+
+      it 'should respond with status ok' do
+        is_expected.to respond_with :ok
+      end
+
+      it 'should create new Book' do
+        expect(Book.count).to eq @book_count + 1
+      end
+    end
+  end
+
+  describe '#update' do
+    context 'with valid params' do
+      before do
+        @new_name = Faker::Book.title
+        put :update, id: book, item: {name: @new_name}
+      end
+
+      it { is_expected.to respond_with :ok }
+      it 'updates the requested book' do
+        book.reload
+        expect(book.name).to eq @new_name
+      end
+      it 'assigns the requested book as @item' do
+        expect(assigns(:item)).to eq(book)
+      end
+    end
+
+    context 'with invalid params' do
+      before do
+        @new_name = Faker::Book.title
+        put :update, id: book, item: {name: @new_name, description: nil}
+      end
+
+      it 'should respond with status unprocessable_entity' do
+        is_expected.to respond_with :unprocessable_entity
+      end
+
+      it 'should not updates the requested book' do
+        book.reload
+        expect(book.name).not_to eq @new_name
+      end
+    end
+  end
+
   describe '#inactivated' do
     FactoryGirl.create_list(:book, 3)
     FactoryGirl.create(:device)
@@ -99,61 +188,6 @@ RSpec.describe V1::ItemsController, type: :controller do
       it 'should provides list of inactive devices' do
         expect(assigns(:items)).to match_array [inactive_device]
       end
-    end
-  end
-
-  describe '#create' do
-    context 'when the user is not admin' do
-      before do
-        controller.instance_variable_set(:@current_user, user)
-
-        post :create, params: {item: FactoryGirl.attributes_for(:book)}
-      end
-
-      it 'should respond with status unauthorized' do
-        is_expected.to respond_with :unauthorized
-      end
-    end
-
-    context 'when the user is admin' do
-      before do
-        @book_count = Book.count
-
-        post :create, params: {item: FactoryGirl.attributes_for(:book, category_ids: [category.id], publish_detail_attributes: FactoryGirl.attributes_for(:publish_detail))}
-      end
-
-      it 'should respond with status ok' do
-        is_expected.to respond_with :ok
-      end
-
-      it 'should create new Book' do
-        expect(Book.count).to eq @book_count + 1
-      end
-    end
-  end
-
-  describe '#show' do
-    context 'when showing existing record' do
-      before do
-        get :show, id: book
-      end
-
-      it 'should respond with status ok' do
-        is_expected.to respond_with :ok
-      end
-
-      it 'should assign book to @item' do
-        expect(assigns(:item)).to eq book
-      end
-    end
-
-    context 'when showing non existing record' do
-      before do
-        get :show, id: Item.last.id + 1
-      end
-
-      it { is_expected.to respond_with :not_found }
-      it { is_expected.to rescue_from ActiveRecord::RecordNotFound }
     end
   end
 

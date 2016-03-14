@@ -1,10 +1,23 @@
 class V1::ItemsController < V1::ApplicationController
-  before_action :set_item, only: [:show, :change_status]
+  before_action :set_item, only: [:show, :change_status, :update]
   before_action :authorize_item, only: [:create, :change_status]
   before_action :filter, only: [:index, :inactivated]
 
   def index
     @items = @items.ACTIVE
+  end
+
+  def show
+  end
+
+  def create
+    @item = Item.new(item_params)
+    @item.save!
+  end
+
+  def update
+    @item.update!(item_params)
+    render 'v1/items/create'
   end
 
   # @url v1/items/inactivated
@@ -18,15 +31,7 @@ class V1::ItemsController < V1::ApplicationController
     render 'v1/items/index'
   end
 
-  def create
-    @item = Item.new(item_params)
-    @item.save!
-  end
-
-  def show
-  end
-
-  # @url v1/items/status
+  # @url v1/items/change_status
   # @action GET
   #
   # Toggle status of the item
