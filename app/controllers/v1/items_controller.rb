@@ -1,7 +1,7 @@
 class V1::ItemsController < V1::ApplicationController
   before_action :set_item, only: [:show, :change_status, :update]
   before_action :authorize_item, only: [:create, :change_status]
-  before_action :filter, only: [:index, :inactivated]
+  before_action :filter, only: [:index, :inactive]
 
   def index
     @items = @items.ACTIVE
@@ -21,13 +21,13 @@ class V1::ItemsController < V1::ApplicationController
     render 'v1/items/create'
   end
 
-  # @url v1/items/inactivated
+  # @url v1/items/inactive
   # @action GET
   #
-  # Provides listing of inactivated books
+  # Provides listing of inactive books
   #
   # @response [Json]
-  def inactivated
+  def inactive
     @items = @items.INACTIVE
     render 'v1/items/index'
   end

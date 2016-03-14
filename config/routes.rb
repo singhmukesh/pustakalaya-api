@@ -6,7 +6,7 @@ Rails.application.routes.draw do
         put :change_status
       end
       collection do
-        get :inactivated
+        get :inactive
         get :most_rated
         get :most_leased
       end

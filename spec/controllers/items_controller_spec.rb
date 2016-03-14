@@ -148,7 +148,7 @@ RSpec.describe V1::ItemsController, type: :controller do
     end
   end
 
-  describe '#inactivated' do
+  describe '#inactive' do
     FactoryGirl.create_list(:book, 3)
     FactoryGirl.create(:device)
     FactoryGirl.create(:kindle)
@@ -159,7 +159,7 @@ RSpec.describe V1::ItemsController, type: :controller do
 
     context 'when param type is not defined' do
       before do
-        get :inactivated
+        get :inactive
       end
 
       it { is_expected.to respond_with :ok }
@@ -170,7 +170,7 @@ RSpec.describe V1::ItemsController, type: :controller do
 
     context 'when param type is kindle' do
       before do
-        get :inactivated, type: Kindle.to_s
+        get :inactive, type: Kindle.to_s
       end
 
       it { is_expected.to respond_with :ok }
@@ -181,7 +181,7 @@ RSpec.describe V1::ItemsController, type: :controller do
 
     context 'when param type is device' do
       before do
-        get :inactivated, type: Device.to_s
+        get :inactive, type: Device.to_s
       end
 
       it { is_expected.to respond_with :ok }
