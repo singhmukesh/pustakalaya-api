@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160309074712) do
+ActiveRecord::Schema.define(version: 20160314070340) do
 
   create_table "categories", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "title",      null: false
@@ -56,9 +56,9 @@ ActiveRecord::Schema.define(version: 20160309074712) do
   end
 
   create_table "publish_details", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.integer  "isbn",         null: false
+    t.integer  "isbn"
     t.string   "author",       null: false
-    t.date     "publish_date", null: false
+    t.date     "publish_date"
     t.integer  "item_id"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
