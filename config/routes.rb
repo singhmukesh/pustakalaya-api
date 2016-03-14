@@ -37,6 +37,7 @@ Rails.application.routes.draw do
     resources :categories, only: [:index]
     resources :ratings, only: [:create]
     resources :reviews, only: [:create]
+    resources :authors, only: [:index]
   end
 
   require 'sidekiq/web'
