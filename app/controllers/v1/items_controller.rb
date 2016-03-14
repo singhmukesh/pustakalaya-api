@@ -33,7 +33,7 @@ class V1::ItemsController < V1::ApplicationController
   end
 
   # @url v1/items/change_status
-  # @action GET
+  # @action PUT
   #
   # Toggle status of the item
   #
