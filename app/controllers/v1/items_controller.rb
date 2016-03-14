@@ -11,6 +11,7 @@ class V1::ItemsController < V1::ApplicationController
   end
 
   def create
+    params[:item][:type].capitalize!
     @item = Item.new(item_params)
     @item.save!
   end
