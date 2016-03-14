@@ -40,24 +40,27 @@ RSpec.describe V1::ReviewsController, type: :controller do
         is_expected.to respond_with :unprocessable_entity
       end
 
-      it 'should not create new Rating' do
-        expect(Review.count).to eq @review_count
-      end
-    end
-
-    context 'when already reviewable item is reviewed' do
-      before do
-        FactoryGirl.create(:review, user: user, item: book)
-        @review_count = Review.count
-        post :create, params: {review: FactoryGirl.attributes_for(:review, item_id: book.id)}
+      it 'should not create new Review' do
+        it 'should not create new Review' do
+          expect(Review.count).to eq @review_count
+        end
       end
 
-      it 'should respond with status unprocessable_entity' do
-        is_expected.to respond_with :unprocessable_entity
-      end
+      context 'when already reviewable item is reviewed' do
+        before do
+          FactoryGirl.create(:review, user: user, item: book)
+          @review_count = Review.where(user_id: user.id, item_id: book.id).count
+          @description = Faker::Lorem.paragraph
+          post :create, params: {review: FactoryGirl.attributes_for(:review, description: @description, item_id: book.id)}
+        end
 
-      it 'should not create new Rating' do
-        expect(Review.count).to eq @review_count
+        it 'should respond with status ok' do
+          is_expected.to respond_with :ok
+        end
+
+        it 'should create new Review for same entity by same user' do
+          expect(Review.where(user_id: user.id, item_id: book.id).count).to eq @review_count + 1
+        end
       end
     end
   end
