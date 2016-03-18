@@ -77,7 +77,7 @@ class Item < ApplicationRecord
     # @params type [String] expected to be value of Item::ActiveRecord_Relation type attribute
     #
     # @return [Item::ActiveRecord_Relation Collection]
-    def most_rated(type = Book.to_s)
+    def most_rated(type)
       type ||= Book.to_s
       raise ActiveRecord::StatementInvalid unless Item.rateable?(type)
       joins(:ratings).group('ratings.item_id').order('avg(ratings.value) desc').ACTIVE.where('type = ?', type)
@@ -88,7 +88,7 @@ class Item < ApplicationRecord
     # @params type [String] expected to be value of Item::ActiveRecord_Relation type attribute
     #
     # @return [Item::ActiveRecord_Relation Collection]
-    def most_leased(type = Book.to_s)
+    def most_leased(type)
       type ||= Book.to_s
       raise ActiveRecord::StatementInvalid unless Item.leaseable?(type)
       self.joins(:leases).group('leases.item_id').order('count(leases.item_id) desc').ACTIVE.where('type = ?', type)
