@@ -80,13 +80,13 @@ RSpec.describe Item, type: :model do
     end
 
     it 'should provide Book with highest rating' do
-      expect(Item.most_rated).to eq [book1, book2]
+      expect(Item.most_rated(Book.to_s)).to eq [book1, book2]
     end
   end
 
   describe '.most_leased' do
     context 'when params type is Book' do
-      let(:book1) { FactoryGirl.create(:book) }
+      let(:book1) { FactoryGirl.create(:book, quantity: 2) }
       let(:book2) { FactoryGirl.create(:book) }
 
       before do
@@ -101,7 +101,7 @@ RSpec.describe Item, type: :model do
     end
 
     context 'when params type is Device' do
-      let(:device1) { FactoryGirl.create(:device) }
+      let(:device1) { FactoryGirl.create(:device, quantity: 2) }
       let(:device2) { FactoryGirl.create(:device) }
 
       before do
