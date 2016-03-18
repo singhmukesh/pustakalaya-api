@@ -1,7 +1,13 @@
 class V1::LeasesController < V1::ApplicationController
-  after_action :notify
+  after_action :notify, only: [:create, :return]
   after_action :unwatch_book, only: :create
   rescue_from CustomException::ItemUnavailable, with: :item_unavailable
+
+  def index
+    authorize Lease
+    @leases = Lease.ACTIVE.list(params[:type])
+    @leases = paginate(@leases)
+  end
 
   def create
     @lease = current_user.leases.new(lease_params)
@@ -26,7 +32,7 @@ class V1::LeasesController < V1::ApplicationController
   private
 
   def lease_params
-    params.require(:lease).permit(:id, :issue_date, :due_date, :item_id)
+    params.require(:lease).permit(:id, :issued_date, :due_date, :item_id)
   end
 
   def item_unavailable(error)

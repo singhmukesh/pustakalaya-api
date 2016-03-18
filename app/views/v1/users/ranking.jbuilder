@@ -6,4 +6,4 @@ json.users do
   end
 end
 
-json.partial! 'v1/shared/pagination', collection: users
+json.partial! 'v1/shared/pagination', list: users

@@ -13,8 +13,4 @@ class ItemPolicy
   def change_status?
     user.ADMIN?
   end
-
-  def leased?
-    user.ADMIN?
-  end
 end

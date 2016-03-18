@@ -117,7 +117,7 @@ RSpec.describe User, type: :model do
 
     context 'when item type is not defined' do
       it 'should provide top user of Book' do
-        expect(User.with_most_leases).to eq [@user2, @user1]
+        expect(User.with_most_leases(nil)).to eq [@user2, @user1]
       end
     end
 

@@ -1,34 +1,39 @@
 class V1::ItemsController < V1::ApplicationController
-  before_action :set_item, only: [:show, :change_status]
-  before_action :filter, only: [:index, :inactivated]
-  after_action :paginate_items, only: [:leased, :most_rated, :most_leased]
+  before_action :set_item, only: [:show, :change_status, :update]
+  before_action :authorize_item, only: [:create, :change_status]
+  before_action :filter, only: [:index, :inactive]
 
   def index
-    @items.ACTIVE
-  end
-
-  # @url v1/items/inactivated
-  # @action GET
-  #
-  # Provides listing of inactivated books
-  #
-  # @response [Json]
-  def inactivated
-    @items = @items.INACTIVE
-    render 'v1/items/index'
-  end
-
-  def create
-    authorize Item
-    @item = Item.new(item_params)
-    @item.save!
+    @items = @items.ACTIVE
   end
 
   def show
   end
 
-  # @url v1/items/status
+  def create
+    params[:item][:type].capitalize!
+    @item = Item.new(item_params)
+    @item.save!
+  end
+
+  def update
+    @item.update!(item_params)
+    render 'v1/items/create'
+  end
+
+  # @url v1/items/inactive
   # @action GET
+  #
+  # Provides listing of inactive books
+  #
+  # @response [Json]
+  def inactive
+    @items = @items.INACTIVE
+    render 'v1/items/index'
+  end
+
+  # @url v1/items/change_status
+  # @action PUT
   #
   # Toggle status of the item
   #
@@ -37,19 +42,7 @@ class V1::ItemsController < V1::ApplicationController
   #
   # @response [Json]
   def change_status
-    authorize Item
     @item.update({status: Item.statuses[status]})
-  end
-
-  # @url v1/items/leased
-  # @action GET
-  #
-  # Provides listing of leased items
-  #
-  # @response [Json]
-  def leased
-    authorize Item
-    @items = Item.where(id: leased_item_ids)
   end
 
   # @url v1/items/most_rated/
@@ -62,6 +55,7 @@ class V1::ItemsController < V1::ApplicationController
   # @response [Json] Item details
   def most_rated
     @items = Item.most_rated(params[:type])
+    @items = paginate(@items)
   end
 
   # @url v1/items/most_leased/
@@ -74,9 +68,14 @@ class V1::ItemsController < V1::ApplicationController
   # @response [Json] Item details
   def most_leased
     @items = Item.most_leased(params[:type])
+    @items = paginate(@items)
   end
 
   private
+
+  def authorize_item
+    authorize Item
+  end
 
   def item_params
     params.require(:item).permit(:id, :name, :code, :quantity, :description, :image, :status, :type, category_ids: [], publish_detail_attributes: [:id, :item_id, :isbn, :author, :publish_date])

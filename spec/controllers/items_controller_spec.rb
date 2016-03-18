@@ -59,46 +59,28 @@ RSpec.describe V1::ItemsController, type: :controller do
     end
   end
 
-  describe '#inactivated' do
-    FactoryGirl.create_list(:book, 3)
-    FactoryGirl.create(:device)
-    FactoryGirl.create(:kindle)
-    let!(:inactive_book) { FactoryGirl.create(:book, status: Item.statuses[:INACTIVE]) }
-    let!(:inactive_kindle1) { FactoryGirl.create(:kindle, status: Item.statuses[:INACTIVE]) }
-    let!(:inactive_kindle2) { FactoryGirl.create(:kindle, status: Item.statuses[:INACTIVE]) }
-    let!(:inactive_device) { FactoryGirl.create(:device, status: Item.statuses[:INACTIVE]) }
-
-    context 'when param type is not defined' do
+  describe '#show' do
+    context 'when showing existing record' do
       before do
-        get :inactivated
+        get :show, id: book
       end
 
-      it { is_expected.to respond_with :ok }
-      it 'should provides list of inactive items' do
-        expect(assigns(:items)).to match_array [inactive_book, inactive_kindle1, inactive_kindle2, inactive_device]
+      it 'should respond with status ok' do
+        is_expected.to respond_with :ok
+      end
+
+      it 'should assign book to @item' do
+        expect(assigns(:item)).to eq book
       end
     end
 
-    context 'when param type is kindle' do
+    context 'when showing non existing record' do
       before do
-        get :inactivated, type: Kindle.to_s
+        get :show, id: Item.last.id + 1
       end
 
-      it { is_expected.to respond_with :ok }
-      it 'should provides list of inactive kindles' do
-        expect(assigns(:items)).to match_array [inactive_kindle1, inactive_kindle2]
-      end
-    end
-
-    context 'when param type is device' do
-      before do
-        get :inactivated, type: Device.to_s
-      end
-
-      it { is_expected.to respond_with :ok }
-      it 'should provides list of inactive devices' do
-        expect(assigns(:items)).to match_array [inactive_device]
-      end
+      it { is_expected.to respond_with :not_found }
+      it { is_expected.to rescue_from ActiveRecord::RecordNotFound }
     end
   end
 
@@ -132,28 +114,80 @@ RSpec.describe V1::ItemsController, type: :controller do
     end
   end
 
-  describe '#show' do
-    context 'when showing existing record' do
+  describe '#update' do
+    context 'with valid params' do
       before do
-        get :show, id: book
+        @new_name = Faker::Book.title
+        put :update, id: book, item: {name: @new_name}
       end
 
-      it 'should respond with status ok' do
-        is_expected.to respond_with :ok
+      it { is_expected.to respond_with :ok }
+      it 'updates the requested book' do
+        book.reload
+        expect(book.name).to eq @new_name
       end
-
-      it 'should assign book to @item' do
-        expect(assigns(:item)).to eq book
+      it 'assigns the requested book as @item' do
+        expect(assigns(:item)).to eq(book)
       end
     end
 
-    context 'when showing non existing record' do
+    context 'with invalid params' do
       before do
-        get :show, id: Item.last.id + 1
+        @new_name = Faker::Book.title
+        put :update, id: book, item: {name: @new_name, description: nil}
       end
 
-      it { is_expected.to respond_with :not_found }
-      it { is_expected.to rescue_from ActiveRecord::RecordNotFound }
+      it 'should respond with status unprocessable_entity' do
+        is_expected.to respond_with :unprocessable_entity
+      end
+
+      it 'should not updates the requested book' do
+        book.reload
+        expect(book.name).not_to eq @new_name
+      end
+    end
+  end
+
+  describe '#inactive' do
+    FactoryGirl.create_list(:book, 3)
+    FactoryGirl.create(:device)
+    FactoryGirl.create(:kindle)
+    let!(:inactive_book) { FactoryGirl.create(:book, status: Item.statuses[:INACTIVE]) }
+    let!(:inactive_kindle1) { FactoryGirl.create(:kindle, status: Item.statuses[:INACTIVE]) }
+    let!(:inactive_kindle2) { FactoryGirl.create(:kindle, status: Item.statuses[:INACTIVE]) }
+    let!(:inactive_device) { FactoryGirl.create(:device, status: Item.statuses[:INACTIVE]) }
+
+    context 'when param type is not defined' do
+      before do
+        get :inactive
+      end
+
+      it { is_expected.to respond_with :ok }
+      it 'should provides list of inactive items' do
+        expect(assigns(:items)).to match_array [inactive_book, inactive_kindle1, inactive_kindle2, inactive_device]
+      end
+    end
+
+    context 'when param type is kindle' do
+      before do
+        get :inactive, type: Kindle.to_s
+      end
+
+      it { is_expected.to respond_with :ok }
+      it 'should provides list of inactive kindles' do
+        expect(assigns(:items)).to match_array [inactive_kindle1, inactive_kindle2]
+      end
+    end
+
+    context 'when param type is device' do
+      before do
+        get :inactive, type: Device.to_s
+      end
+
+      it { is_expected.to respond_with :ok }
+      it 'should provides list of inactive devices' do
+        expect(assigns(:items)).to match_array [inactive_device]
+      end
     end
   end
 
@@ -185,51 +219,6 @@ RSpec.describe V1::ItemsController, type: :controller do
       it 'should not change book status or say should be ACTIVE as default status is ACTIVE' do
         book.reload
         expect(book.INACTIVE?).to be_falsey
-      end
-    end
-  end
-
-  describe '#leased' do
-    before do
-      @book1, @book2, @book3 = FactoryGirl.create_list(:book, 3)
-      @device1 = FactoryGirl.create(:device)
-      @device2 = FactoryGirl.create(:device)
-
-      FactoryGirl.create_list(:lease, @book1.quantity, item: @book1)
-      FactoryGirl.create(:lease, item: @book2)
-      FactoryGirl.create(:lease, item: @device1)
-    end
-
-    context 'when params type is undefined' do
-      before do
-        get :leased
-      end
-
-      it { is_expected.to respond_with :ok }
-      it 'should list leased items' do
-        expect(assigns(:items)).to match_array [@book1, @book2, @device1]
-      end
-    end
-
-    context 'when params type is book' do
-      before do
-        get :leased, type: Book.to_s
-      end
-
-      it { is_expected.to respond_with :ok }
-      it 'should list leased books' do
-        expect(assigns(:items)).to match_array [@book1, @book2]
-      end
-    end
-
-    context 'when params type is device' do
-      before do
-        get :leased, type: Device.to_s
-      end
-
-      it { is_expected.to respond_with :ok }
-      it 'should list leased devices' do
-        expect(assigns(:items)).to match_array [@device1]
       end
     end
   end

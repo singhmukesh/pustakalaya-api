@@ -31,8 +31,6 @@ pickle-email-*.html
 # Ignore the default SQLite database and schema.
 /db/*.sqlite3
 /db/*.sqlite3-journal
-# Configs
-/config/database.yml
 # Ignore rmvrc
 .rvmrc
 # If using bower-rails ignore default bower_components path bower.json files

@@ -8,3 +8,5 @@ json.leases do
     end
   end
 end
+
+json.partial! 'v1/shared/pagination', list: leases

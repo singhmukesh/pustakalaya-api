@@ -5,19 +5,19 @@ class Device < Item
 
   # Check if the device is available for lease
   #
-  # @params issue_date [DateTime] starting time of availability
+  # @params issued_date [DateTime] starting time of availability
   # @params due_date [DateTime] ending time of availability
   #
   # @return[Boolean]
-  def available?(issue_date, due_date)
-    return false if issue_date > due_date
+  def available?(issued_date, due_date)
+    return false if issued_date > due_date
 
     leases = self.leases.ACTIVE
     count = 0
 
     if leases.present?
       leases.each do |lease|
-        if (issue_date >= lease.issue_date && issue_date < lease.due_date) || (due_date <= lease.due_date && due_date > lease.issue_date)
+        if (issued_date >= lease.issued_date && issued_date < lease.due_date) || (due_date <= lease.due_date && due_date > lease.issued_date)
           count = count + 1
         end
       end
