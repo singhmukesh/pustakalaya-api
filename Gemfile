@@ -61,14 +61,16 @@ end
 group :test do
   # Database_cleaner for cleaning test database.
   gem 'database_cleaner', '~> 1.5.1'
-  # Simplecove for generating the code coverage report
+  # Simplecov for generating the code coverage report
   gem 'simplecov', require: false
   # Codeclimate-test-reporter for sending the coverage report to code climate
   gem 'codeclimate-test-reporter', '~> 0.4.8'
-  # Provides Test::Unit and RSpec-compatible one-liners that test common Rails functinality.
+  # Provides Test::Unit and RSpec-compatible one-liners that test common Rails functionality.
   gem 'shoulda-matchers', '~> 3.1.1'
   # Provides a unified method to mock Time.now, Date.today, and DateTime.now
   gem 'timecop', '~> 0.8.0'
+  # Library for stubbing and setting expectations on HTTP requests
+  gem 'webmock', '~> 1.24.2'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
