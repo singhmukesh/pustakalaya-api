@@ -41,26 +41,24 @@ RSpec.describe V1::ReviewsController, type: :controller do
       end
 
       it 'should not create new Review' do
-        it 'should not create new Review' do
-          expect(Review.count).to eq @review_count
-        end
+        expect(Review.count).to eq @review_count
+      end
+    end
+
+    context 'when already reviewable item is reviewed' do
+      before do
+        FactoryGirl.create(:review, user: user, item: book)
+        @review_count = Review.where(user_id: user.id, item_id: book.id).count
+        @description = Faker::Lorem.paragraph
+        post :create, params: {review: FactoryGirl.attributes_for(:review, description: @description, item_id: book.id)}
       end
 
-      context 'when already reviewable item is reviewed' do
-        before do
-          FactoryGirl.create(:review, user: user, item: book)
-          @review_count = Review.where(user_id: user.id, item_id: book.id).count
-          @description = Faker::Lorem.paragraph
-          post :create, params: {review: FactoryGirl.attributes_for(:review, description: @description, item_id: book.id)}
-        end
+      it 'should respond with status ok' do
+        is_expected.to respond_with :ok
+      end
 
-        it 'should respond with status ok' do
-          is_expected.to respond_with :ok
-        end
-
-        it 'should create new Review for same entity by same user' do
-          expect(Review.where(user_id: user.id, item_id: book.id).count).to eq @review_count + 1
-        end
+      it 'should create new Review for same entity by same user' do
+        expect(Review.where(user_id: user.id, item_id: book.id).count).to eq @review_count + 1
       end
     end
   end
