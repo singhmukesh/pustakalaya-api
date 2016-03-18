@@ -1,0 +1,44 @@
+default: &default
+  AUTH_DOMAIN: 'example.com'
+  MAX_TIME_FOR_RENEW: '1'
+  BOOK_LEASE_DAYS: '15'
+  MAX_DEVICE_LEASE_DAYS: '2'
+
+  SES_ADDRESS: ses_address
+  SES_USER_NAME: ses_username
+  SES_PASSWORD: ses_password
+
+  DEFAULT_MAILER_EMAIL: default_mailer_email
+  MAILER_EMAIL: mailer_email
+
+  SIDEKIQ_USERNAME: sidekiq_web_UI_username
+  SIDEKIQ_PASSWORD: sidekiq_web_UI_password
+
+  PUSTAKALAYA_DATABASE_USERNAME: database_username
+  PUSTAKALAYA_DATABASE_PASSWORD: database_password
+
+development:
+  <<: *default
+  SECRET_KEY_BASE: secret_key_base
+  DEFAULT_URL: default_url
+  ASSET_HOST: assets_host
+
+test:
+  <<: *default
+  SECRET_KEY_BASE: secret_key_base
+
+dev:
+  <<: *default
+  SECRET_KEY_BASE: secret_key_base
+  DEFAULT_URL: dev_env_default_url
+  ASSET_HOST: dev_env_assets_host
+  PUSTAKALAYA_DATABASE_USERNAME: dev_env_database_username
+  PUSTAKALAYA_DATABASE_PASSWORD: dev_env_database_password
+
+production:
+  <<: *default
+  SECRET_KEY_BASE: secret_key_base
+  DEFAULT_URL: production_env_default_url
+  ASSET_HOST: production_env_assets_host
+  PUSTAKALAYA_DATABASE_USERNAME: production_env_database_username
+  PUSTAKALAYA_DATABASE_PASSWORD: production_env_database_password
