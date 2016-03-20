@@ -123,6 +123,24 @@ RSpec.describe V1::LeasesController, type: :controller do
         expect(watch.INACTIVE?).to be_truthy
       end
     end
+
+    context 'when unavailable item is leased' do
+      let!(:book) { FactoryGirl.create(:book, quantity: 1) }
+      let!(:lease) { FactoryGirl.create(:lease, item_id: book.id) }
+
+      before do
+        @lease_count = Lease.count
+        post :create, params: {lease: FactoryGirl.attributes_for(:lease, item_id: book.id)}
+      end
+
+      it 'should respond with status conflict' do
+        is_expected.to respond_with :conflict
+      end
+
+      it 'should not create new Lease' do
+        expect(Lease.count).to eq @lease_count
+      end
+    end
   end
 
   describe '#return' do
