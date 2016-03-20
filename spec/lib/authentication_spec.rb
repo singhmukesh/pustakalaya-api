@@ -10,8 +10,10 @@ RSpec.describe Authentication, type: :lib do
     context 'when the request has valid authorization token' do
       before do
         @access_token = Faker::Lorem.characters
+        @refresh_token = Faker::Lorem.characters
         @result = '{
       "access_token": "'+@access_token+'",
+      "refresh_token": "'+@refresh_token+'",
       "token_type": "Bearer",
       "expires_in": 3331,
       "id_token": "'+Faker::Lorem.characters+'"
@@ -22,11 +24,11 @@ RSpec.describe Authentication, type: :lib do
         stub_request(:post, /www.googleapis.com/)
         .to_return(status: 200, body: @result, headers: {'Content-Type' => 'application/json'})
 
-        expect(Authentication::login(Faker::Lorem.characters)).to eq({access_token: @access_token, refresh_token: nil})
+        expect(Authentication::login(Faker::Lorem.characters)).to eq({access_token: @access_token, refresh_token: @refresh_token})
       end
     end
 
-    context 'when the request has valid authorization token' do
+    context 'when the request has invalid authorization token' do
       it 'should raise CustomException::Unauthorized' do
         stub_request(:post, /www.googleapis.com/)
         .to_return(status: 400, body: '{"error": "Unauthorized request"}', headers: {'Content-Type' => 'application/json'})
@@ -40,6 +42,44 @@ RSpec.describe Authentication, type: :lib do
         stub_request(:post, /www.googleapis.com/).to_timeout
 
         expect { Authentication::login(Faker::Lorem.characters) }.to raise_exception CustomException::RequestTimeOut
+      end
+    end
+  end
+
+  describe '.refresh' do
+    context 'when the request has valid refresh token' do
+      before do
+        @access_token = Faker::Lorem.characters
+        @result = '{
+      "access_token": "'+@access_token+'",
+      "token_type": "Bearer",
+      "expires_in": 3331,
+      "id_token": "'+Faker::Lorem.characters+'"
+      }'
+      end
+
+      it 'should respond with access_token' do
+        stub_request(:post, /www.googleapis.com/)
+        .to_return(status: 200, body: @result, headers: {'Content-Type' => 'application/json'})
+
+        expect(Authentication::refresh(Faker::Lorem.characters)).to eq({access_token: @access_token})
+      end
+    end
+
+    context 'when the request has invalid refresh token' do
+      it 'should raise CustomException::Unauthorized' do
+        stub_request(:post, /www.googleapis.com/)
+        .to_return(status: 400, body: '{"error": "Unauthorized request"}', headers: {'Content-Type' => 'application/json'})
+
+        expect { Authentication::refresh(Faker::Lorem.characters) }.to raise_exception CustomException::Unauthorized
+      end
+    end
+
+    context 'when the request to server get timeout' do
+      it 'should raise CustomException::RequestTimeOut' do
+        stub_request(:post, /www.googleapis.com/).to_timeout
+
+        expect { Authentication::refresh(Faker::Lorem.characters) }.to raise_exception CustomException::RequestTimeOut
       end
     end
   end

@@ -41,6 +41,7 @@ Rails.application.routes.draw do
     resources :session, only: [] do
       collection do
         post :login
+        post :refresh
       end
     end
   end

@@ -12,4 +12,16 @@ class V1::SessionController < V1::ApplicationController
   def login
     @login = Authentication::login(params[:authorization_code])
   end
+
+  # @url v1/session/refresh
+  # @action POST
+  #
+  # Provides new access_token on behalf of refresh_token
+  #
+  # @required code [String] Refresh code
+  #
+  # @response [Json] containing access token
+  def refresh
+    @access_token = Authentication::refresh(params[:refresh_token])
+  end
 end

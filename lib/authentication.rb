@@ -41,6 +41,43 @@ module Authentication
       }
     end
 
+    # Provides the new access token in behalf of refresh token
+    #
+    # @params code [String], Google OAuth Refresh code
+    #
+    # @return [HTTParty::Response], Hash containing the Google OAuth request details
+    #
+    #   example response of valid auth token:
+    #   {"access_token"=> <some character patter>,
+    #     "token_type"=> "Bearer",
+    #     "expires_in"=> <integer value in second>,
+    #     "id_token"=> <some character patter>
+    #   }
+    #
+    #   example response 0f invalid auth token
+    #   {"error"=>"invalid_grant", "error_description"=>"Invalid code."}
+    #
+    # @return [Hash] containing access token
+    def refresh(refresh_token)
+      begin
+        response = HTTParty.post('https://www.googleapis.com/oauth2/v4/token',
+        query: { refresh_token: refresh_token,
+        grant_type: 'refresh_token',
+        client_id: ENV['GOOGLE_OAUTH_CLIENT_ID'],
+        client_secret: ENV['GOOGLE_OAUTH_CLIENT_SECRET']
+        })
+      rescue
+        raise CustomException::RequestTimeOut
+      end
+
+      raise CustomException::Unauthorized unless response.code == Constant::OK
+
+      {
+      access_token: response['access_token']
+      }
+    end
+
+
     # Validate whether the auth token with Google OAuth and provide details
     #
     # @params token [String], Google OAuth token
