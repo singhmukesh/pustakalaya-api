@@ -49,15 +49,20 @@ RSpec.describe V1::RatingsController, type: :controller do
       before do
         FactoryGirl.create(:rating, user: user, item: book)
         @rating_count = Rating.count
-        post :create, params: {rating: FactoryGirl.attributes_for(:rating, item_id: book.id)}
+        @value = Faker::Number.between(1, Rating::UPPER_BOUND)
+        post :create, params: {rating: FactoryGirl.attributes_for(:rating, value: @value, item_id: book.id)}
       end
 
-      it 'should respond with status unprocessable_entity' do
-        is_expected.to respond_with :unprocessable_entity
+      it 'should respond with status ok' do
+        is_expected.to respond_with :ok
       end
 
       it 'should not create new Rating' do
         expect(Rating.count).to eq @rating_count
+      end
+
+      it 'should change rating value' do
+        expect(user.ratings.find_by(item_id: book.id).value).to eq @value
       end
     end
   end
