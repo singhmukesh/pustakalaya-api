@@ -38,6 +38,12 @@ Rails.application.routes.draw do
     resources :ratings, only: [:create]
     resources :reviews, only: [:create]
     resources :authors, only: [:index]
+    resources :session, only: [] do
+      collection do
+        post :login
+        post :refresh
+      end
+    end
   end
 
   require 'sidekiq/web'

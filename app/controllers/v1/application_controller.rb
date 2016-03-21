@@ -18,7 +18,7 @@ class V1::ApplicationController < ActionController::Base
   # @return [User::ActiveRecord_Relation], Active Record Object containing the user details
   def authenticate_user!
     # token = request.headers['Authorization']
-    # auth = Authentication::authenticate_with_oauth(token)
+    # auth = Authentication::get_user_info_from_access_token(token)
     #
     # Authentication::authenticate_domain(auth) if ENV['AUTH_DOMAIN']
     # @current_user = User.find_user(auth)
