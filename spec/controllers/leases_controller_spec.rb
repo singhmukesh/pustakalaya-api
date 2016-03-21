@@ -62,7 +62,7 @@ RSpec.describe V1::LeasesController, type: :controller do
     context 'when lease attributes are valid' do
       before do
         @lease_count = Lease.count
-        post :create, params: {lease: FactoryGirl.attributes_for(:lease, item_id: device.id)}
+        post :create, params: {lease: FactoryGirl.attributes_for(:lease, issued_date: (Time.now + 1.hour).to_i, due_date: (Time.now + 2.hours).to_i, item_id: device.id)}
       end
 
       it 'should respond with status ok' do
