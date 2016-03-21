@@ -116,19 +116,6 @@ class V1::ItemsController < V1::ApplicationController
     @search_key = search_key
   end
 
-  def leased_item_ids
-    type = params[:type]
-    type.capitalize! if type.present?
-    case type
-    when Book.to_s
-      Lease.ACTIVE.books.pluck(:item_id).uniq
-    when Device.to_s
-      Lease.ACTIVE.devices.pluck(:item_id).uniq
-    else
-      Lease.ACTIVE.pluck(:item_id).uniq
-    end
-  end
-
   def paginate_items
     @items = paginate(@items)
   end
