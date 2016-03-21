@@ -10,6 +10,8 @@ class V1::LeasesController < V1::ApplicationController
   end
 
   def create
+    params[:lease][:issued_date] = Time.at(params[:lease][:issued_date].to_i).utc if params[:lease][:issued_date].present?
+    params[:lease][:due_date] = Time.at(params[:lease][:due_date].to_i).utc if params[:lease][:due_date].present?
     @lease = current_user.leases.new(lease_params)
     @lease.save!
   end
