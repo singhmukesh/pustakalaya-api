@@ -17,6 +17,10 @@ default: &default
   PUSTAKALAYA_DATABASE_USERNAME: database_username
   PUSTAKALAYA_DATABASE_PASSWORD: database_password
 
+  GOOGLE_OAUTH_CLIENT_ID: google_oauth_client_id
+  GOOGLE_OAUTH_CLIENT_SECRET: google_oauth_client_secret
+  GOOGLE_OAUTH_REDIRECT_URL: google_oauth_redirect_url
+
 development:
   <<: *default
   SECRET_KEY_BASE: secret_key_base
