@@ -4,7 +4,8 @@ RSpec.describe V1::RatingsController, type: :controller do
   let(:user) { FactoryGirl.create(:user) }
   let(:book) { FactoryGirl.create(:book) }
   let(:device) { FactoryGirl.create(:device) }
-
+  let(:user_detail) { JSON.parse(File.read('spec/support/json/user.json')) }
+  
   describe '#create' do
     context 'when Authentication params are valid' do
       before do
@@ -70,8 +71,8 @@ RSpec.describe V1::RatingsController, type: :controller do
 
     context 'when the domain of user OAuth mail address does not match' do
       before do
-        allow(Authentication).to receive(:get_user_info_from_access_token)
-        allow(Authentication).to receive(:authenticate_domain).and_raise(CustomException::DomainConflict)
+        ENV['AUTH_DOMAIN'] = user_detail['hd'] + Faker::Lorem.word
+        allow(Authentication).to receive(:get_user_info_from_access_token).and_return(user_detail)
 
         post :create, params: {rating: FactoryGirl.attributes_for(:rating, item_id: book.id)}
       end

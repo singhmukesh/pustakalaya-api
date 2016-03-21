@@ -127,7 +127,7 @@ RSpec.describe Authentication, type: :lib do
   describe '.authenticate_domain' do
     context 'when the auth domain does not match' do
       it 'should raise exception CustomException::DomainConflict' do
-        ENV['AUTH_DOMAIN'] = 'foo.com'
+        ENV['AUTH_DOMAIN'] = user_detail['hd'] + Faker::Lorem.word
         expect { Authentication::authenticate_domain(user_detail) }.to raise_exception CustomException::DomainConflict
       end
     end
