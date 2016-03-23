@@ -13,9 +13,11 @@ class Lease < ApplicationRecord
   validate :book_available, on: :create, if: :book?
   validate :device_available, on: :create, if: :device?
 
-  validates_datetime :issued_date, on_or_after: lambda { Time.current }, if: :device?
-  validates_datetime :due_date, after: lambda { Time.current }, if: :device?
-  validates_datetime :return_date, on_or_before: lambda { Time.current }, allow_nil: true
+  validates_datetime :issued_date,  on_or_after: lambda { Time.current - 1.minute },
+                                    on_or_after_message: I18n.t('validation.issued_at_past_date'), on: :create, if: :device?
+  validates_datetime :due_date, after: lambda { Time.current - 1.minute },
+                                after_message: I18n.t('validation.due_date_not_upcoming_date'), on: :create, if: :device?
+  validates_datetime :return_date, on_or_before: lambda { Time.current + 1.minute }, allow_nil: true
 
   enum status: [:ACTIVE, :INACTIVE, :EXTENDED]
 
@@ -79,7 +81,7 @@ class Lease < ApplicationRecord
 
   def validate_due_date
     if (issued_date.beginning_of_day + ENV['MAX_DEVICE_LEASE_DAYS'].to_i.days) < due_date.beginning_of_day
-      errors.add(:due_date, I18n.t('validation.invalid_date'))
+      errors.add(:due_date, I18n.t('validation.invalid_date', max: ENV['MAX_DEVICE_LEASE_DAYS']))
     end
   end
 

@@ -20,6 +20,14 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
+  errors:
+    format: "%{message}"
+  activerecord:
+    errors:
+      full_messages:
+        format: "%{message}"
+      messages:
+        record_invalid: "%{errors}"
   exception:
     unauthorized: Unauthorized request
     request_time_out: Request time out
@@ -27,12 +35,14 @@ en:
     not_permitted: Not permitted
     item_unavailable: Item unavailable
   validation:
-    invalid_date: Invalid date
-    already_leased: Already leased
-    available_to_lease: Available to lease
-    already_watched: Already added to watchlist
-    item_not_rateable: Item is not ratebale
-    item_not_reviewable: Item is not reviewable
+    invalid_date: You can't lease device for more than %{max} days.
+    already_leased: You have already leased this book.
+    available_to_lease: Requested book is available to lease.
+    already_watched: Requested book is already in your watchlist.
+    item_not_rateable: Rating on requested item can't be saved.
+    item_not_reviewable: Review on requested item can't be saved.
+    issued_at_past_date: You can't lease device with past time as issued date.
+    due_date_not_upcoming_date: You can't lease device without upcoming time as due date.
   user_mailer:
     note_the_following_date: Please note the following dates.
     issued_date: Issue date

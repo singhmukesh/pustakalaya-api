@@ -1,4 +1,5 @@
-json.extract! device, :id, :name, :image, :code, :description
+json.extract! device, :id, :name, :image, :code, :description, :is_readable, :is_leaseable, :is_rateable, :is_reviewable
+json.is_auto_lease false
 
 json.partial! 'v1/categories/list', item: device
 

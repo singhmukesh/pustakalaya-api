@@ -72,7 +72,7 @@ RSpec.describe Lease, type: :model do
       it 'should be invalid' do
         lease = FactoryGirl.build(:lease, issued_date: Time.current, due_date: Time.current + (ENV['MAX_DEVICE_LEASE_DAYS'].to_i + 1).days)
         lease.valid?
-        expect(lease.errors[:due_date][0]).to eq(I18n.t('validation.invalid_date'))
+        expect(lease.errors[:due_date][0]).to eq(I18n.t('validation.invalid_date', max: ENV['MAX_DEVICE_LEASE_DAYS']))
       end
     end
   end
