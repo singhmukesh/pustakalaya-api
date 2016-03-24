@@ -21,6 +21,9 @@ default: &default
   GOOGLE_OAUTH_CLIENT_SECRET: google_oauth_client_secret
   GOOGLE_OAUTH_REDIRECT_URL: google_oauth_redirect_url
 
+  GOODREADS_KEY: goodreads_key
+  GOODREADS_SECRET: goodreads_secret_key
+
 development:
   <<: *default
   SECRET_KEY_BASE: secret_key_base

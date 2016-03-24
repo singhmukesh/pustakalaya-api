@@ -1,4 +1,8 @@
 json.extract! book, :id, :name, :image, :code, :description, :quantity, :is_readable, :is_leaseable, :is_rateable, :is_reviewable
+json.goodreads_average_rating book.goodreads_average_rating
+json.goodreads_ratings_count book.goodreads_ratings_count
+json.goodreads_reviews_widget book.goodreads_reviews_widget
+
 json.is_auto_lease true
 
 json.publish_detail do

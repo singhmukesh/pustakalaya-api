@@ -19,6 +19,24 @@ class Item < ApplicationRecord
   scope :kindles, -> { where(type: Kindle.to_s) }
   scope :devices, -> { where(type: Device.to_s) }
 
+  def goodreads_book
+    client = Goodreads.new(Goodreads.configuration)
+    isbn = self.publish_detail.isbn.gsub("-", "")
+    client.book_by_isbn(isbn)
+  end
+
+  def goodreads_reviews_widget
+    goodreads_book.reviews_widget
+  end
+
+  def goodreads_ratings_count
+    goodreads_book.ratings_count.to_f
+  end
+
+  def goodreads_average_rating
+    goodreads_book.average_rating.to_f
+  end
+
   # Filter items by category
   #
   # @params category_id [Category::ActiveRecord_Relation id attribute]
