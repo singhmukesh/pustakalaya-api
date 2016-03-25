@@ -8,9 +8,9 @@ class PublishDetail < ApplicationRecord
   #
   # @return [Hashie::Mash]
   def goodreads
+    return nil unless self.isbn.present?
     client = Goodreads.new(Goodreads.configuration)
     isbn = self.isbn.gsub("-", "")
-    return nil unless isbn.present?
     begin
       return client.book_by_isbn(isbn)
     rescue
