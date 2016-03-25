@@ -1,4 +1,5 @@
 json.extract! book, :id, :name, :image, :code, :description, :quantity, :is_readable, :is_leaseable, :is_rateable, :is_reviewable
+
 json.is_auto_lease true
 
 json.publish_detail do

@@ -31,6 +31,8 @@ gem 'sidekiq', '~> 4.1.0'
 gem 'sinatra', github: 'sinatra/sinatra', branch: 'master', require: nil
 # Rack Middleware for handling Cross-Origin Resource Sharing
 gem 'rack-cors', require: 'rack/cors'
+# Access to goodreads.com API
+gem 'goodreads', '~> 0.4.3'
 
 group :development, :test do
   # Call 'binding.pry' anywhere in the code to stop execution and get a debugger console
