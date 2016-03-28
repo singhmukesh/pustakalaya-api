@@ -1,4 +1,4 @@
-json.extract! kindle, :id, :name, :image, :code, :description, :quantity, :is_readable, :is_leaseable, :is_rateable, :is_reviewable
+json.extract! kindle, :id, :name, :image, :code, :description, :is_readable, :is_leaseable, :is_rateable
 json.is_auto_lease true
 
 json.publish_detail do
@@ -8,9 +8,3 @@ end
 json.partial! 'v1/categories/list', item: kindle
 
 json.partial! 'v1/ratings/detail', item: kindle
-
-json.reviews do
-  json.array! kindle.reviews.order(created_at: :desc) do |review|
-    json.partial! 'v1/reviews/detail', review: review
-  end
-end

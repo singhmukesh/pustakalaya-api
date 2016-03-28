@@ -1,4 +1,4 @@
-json.extract! book, :id, :name, :image, :code, :description, :quantity, :is_readable, :is_leaseable, :is_rateable, :is_reviewable
+json.extract! book, :id, :name, :image, :code, :description, :quantity, :is_readable, :is_leaseable, :is_rateable
 
 json.is_auto_lease true
 
@@ -21,9 +21,3 @@ json.leases do
 end
 
 json.partial! 'v1/ratings/detail', item: book
-
-json.reviews do
-  json.array! book.reviews.order(created_at: :desc) do |review|
-    json.partial! 'v1/reviews/detail', review: review
-  end
-end
