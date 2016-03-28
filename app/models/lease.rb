@@ -76,7 +76,7 @@ class Lease < ApplicationRecord
     #
     # @return [Category::ActiveRecord_Relation Collection
     def notify_past_due_date
-      leases = Lease.where('due_date < ?', DateTime.now.utc)
+      leases = Lease.ACTIVE.where('due_date < ?', DateTime.now.utc)
       leases.each do |lease|
         UserMailer.delay(queue: "mailer_#{Rails.env}").notify_past_due_date(lease.id)
       end
@@ -88,7 +88,7 @@ class Lease < ApplicationRecord
     #
     # @return [Category::ActiveRecord_Relation Collection
     def notify_near_due_date
-      leases = Lease.where('due_date < ?', DateTime.now.utc - 1.day)
+      leases = Lease.ACTIVE.where('due_date < ?', DateTime.now.utc - 1.day)
       leases.each do |lease|
         UserMailer.delay(queue: "mailer_#{Rails.env}").notify_near_due_date(lease.id)
       end
