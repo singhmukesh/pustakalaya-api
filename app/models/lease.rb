@@ -72,8 +72,6 @@ class Lease < ApplicationRecord
 
     # Notifies users who have lease which has passed its due date
     #
-    # @params group [String] expected to be value of Item::ActiveRecord_Relation type attribute value
-    #
     # @return [Category::ActiveRecord_Relation Collection
     def notify_past_due_date
       leases = Lease.ACTIVE.where('due_date < ?', DateTime.now.utc)
@@ -83,8 +81,6 @@ class Lease < ApplicationRecord
     end
 
     # Notifies users who have lease which are near to its due date
-    #
-    # @params group [String] expected to be value of Item::ActiveRecord_Relation type attribute value
     #
     # @return [Category::ActiveRecord_Relation Collection
     def notify_near_due_date
