@@ -22,7 +22,7 @@ Rails.application.routes.draw do
       end
     end
     resources :watches, only: [:create] do
-      member do
+      collection do
         post :unwatch
       end
     end

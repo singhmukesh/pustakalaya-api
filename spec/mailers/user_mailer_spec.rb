@@ -157,4 +157,61 @@ RSpec.describe UserMailer, type: :mailer do
       ActionMailer::Base.deliveries.clear
     end
   end
+
+  describe '#notify_past_due_date' do
+    before do
+      @lease = FactoryGirl.create(:lease, :lease_book)
+      @lease.update(due_date: DateTime.now - 2.days)
+      @mail = UserMailer.notify_past_due_date(@lease.id)
+
+      ActionMailer::Base.delivery_method = :test
+      ActionMailer::Base.perform_deliveries = true
+      ActionMailer::Base.deliveries = []
+    end
+
+    it 'renders the receiver email' do
+      expect(@mail.to).to eql([@lease.user.email])
+    end
+
+    it 'renders the sender email' do
+      expect(@mail.from).to eql(ENV['MAILER_EMAIL'].scan(/<([^>]*)>/).first)
+    end
+
+    it 'delay the mails sending process' do
+      expect {
+        UserMailer.delay.notify_past_due_date(@lease.id)
+      }.to change(Sidekiq::Extensions::DelayedMailer.jobs, :size).by(1)
+    end
+
+    after do
+      ActionMailer::Base.deliveries.clear
+    end
+  end
+
+  describe '#notify_near_due_date' do
+    before do
+      @lease = FactoryGirl.create(:lease, :lease_book)
+      @lease.update(due_date: DateTime.now - 2.days)
+      @mail = UserMailer.notify_near_due_date(@lease.id)
+    end
+
+    it 'renders the receiver email' do
+      expect(@mail.to).to eql([@lease.user.email])
+    end
+
+    it 'renders the sender email' do
+      expect(@mail.from).to eql(ENV['MAILER_EMAIL'].scan(/<([^>]*)>/).first)
+    end
+
+    it 'delay the mails sending process' do
+      expect {
+        UserMailer.delay.notify_near_due_date(@lease.id)
+      }.to change(Sidekiq::Extensions::DelayedMailer.jobs, :size).by(1)
+    end
+
+    after do
+      ActionMailer::Base.deliveries.clear
+    end
+  end
+
 end

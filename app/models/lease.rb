@@ -13,10 +13,10 @@ class Lease < ApplicationRecord
   validate :book_available, on: :create, if: :book?
   validate :device_available, on: :create, if: :device?
 
-  validates_datetime :issued_date,  on_or_after: lambda { Time.current - 1.minute },
-                                    on_or_after_message: I18n.t('validation.issued_at_past_date'), on: :create, if: :device?
+  validates_datetime :issued_date, on_or_after: lambda { Time.current - 1.minute },
+  on_or_after_message: I18n.t('validation.issued_at_past_date'), on: :create, if: :device?
   validates_datetime :due_date, after: lambda { Time.current - 1.minute },
-                                after_message: I18n.t('validation.due_date_not_upcoming_date'), on: :create, if: :device?
+  after_message: I18n.t('validation.due_date_not_upcoming_date'), on: :create, if: :device?
   validates_datetime :return_date, on_or_before: lambda { Time.current + 1.minute }, allow_nil: true
 
   enum status: [:ACTIVE, :INACTIVE, :EXTENDED]
@@ -69,6 +69,31 @@ class Lease < ApplicationRecord
         all
       end
     end
+
+    # Notifies users who have lease which has passed its due date
+    #
+    # @params group [String] expected to be value of Item::ActiveRecord_Relation type attribute value
+    #
+    # @return [Category::ActiveRecord_Relation Collection
+    def notify_past_due_date
+      leases = Lease.where('due_date < ?', DateTime.now.utc)
+      leases.each do |lease|
+        UserMailer.delay(queue: "mailer_#{Rails.env}").notify_past_due_date(lease.id)
+      end
+    end
+
+    # Notifies users who have lease which are near to its due date
+    #
+    # @params group [String] expected to be value of Item::ActiveRecord_Relation type attribute value
+    #
+    # @return [Category::ActiveRecord_Relation Collection
+    def notify_near_due_date
+      leases = Lease.where('due_date < ?', DateTime.now.utc - 1.day)
+      leases.each do |lease|
+        UserMailer.delay(queue: "mailer_#{Rails.env}").notify_near_due_date(lease.id)
+      end
+    end
+
   end
 
   private

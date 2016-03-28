@@ -10,7 +10,7 @@ class ItemPolicy
     user.ADMIN?
   end
 
-  def change_status?
+  def status?
     user.ADMIN?
   end
 end

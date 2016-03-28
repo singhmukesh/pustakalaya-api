@@ -47,6 +47,22 @@ class UserMailer < ApplicationMailer
     mail(from: ENV['MAILER_EMAIL'], to: @user.email, subject: t('user_mailer.notification_to_watchers.subject'))
   end
 
+  # Send email regarding item lease being past due date
+  #
+  # @params lease_id [Lease::ActiveRecord_Relation id attribute]
+  def notify_past_due_date(lease_id)
+    set_lease(lease_id)
+    mail(from: ENV['MAILER_EMAIL'], to: @user.email, subject: t('user_mailer.notify_past_due_date.subject'))
+  end
+
+  # Send email regarding item lease being past due date
+  #
+  # @params lease_id [Lease::ActiveRecord_Relation id attribute]
+  def notify_near_due_date(lease_id)
+    set_lease(lease_id)
+    mail(from: ENV['MAILER_EMAIL'], to: @user.email, subject: t('user_mailer.notify_near_due_date.subject'))
+  end
+
   private
 
   def set_lease(id)
