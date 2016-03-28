@@ -41,7 +41,7 @@ class V1::ItemsController < V1::ApplicationController
   # @required status [Integer] 0 to Activate and 1 to Deactivate
   #
   # @response [Json]
-  def change_status
+  def status
     @item.update({status: Item.statuses[status]})
   end
 
