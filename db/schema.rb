@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160314071122) do
+ActiveRecord::Schema.define(version: 20160328052640) do
 
   create_table "categories", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "title",      null: false
@@ -26,19 +26,18 @@ ActiveRecord::Schema.define(version: 20160314071122) do
   end
 
   create_table "items", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.string   "name",                                    null: false
-    t.string   "code",                                    null: false
-    t.integer  "quantity",                    default: 1
-    t.text     "description",   limit: 65535,             null: false
-    t.string   "image",                                   null: false
-    t.integer  "status",                      default: 0, null: false
+    t.string   "name",                                   null: false
+    t.string   "code",                                   null: false
+    t.integer  "quantity",                   default: 1
+    t.text     "description",  limit: 65535,             null: false
+    t.string   "image",                                  null: false
+    t.integer  "status",                     default: 0, null: false
     t.boolean  "is_readable"
     t.boolean  "is_leaseable"
     t.boolean  "is_rateable"
-    t.boolean  "is_reviewable"
-    t.string   "type",                                    null: false
-    t.datetime "created_at",                              null: false
-    t.datetime "updated_at",                              null: false
+    t.string   "type",                                   null: false
+    t.datetime "created_at",                             null: false
+    t.datetime "updated_at",                             null: false
   end
 
   create_table "leases", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -66,11 +65,12 @@ ActiveRecord::Schema.define(version: 20160314071122) do
   end
 
   create_table "ratings", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.integer  "value",      null: false
+    t.integer  "value",                    null: false
     t.integer  "user_id"
     t.integer  "item_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+    t.text     "review",     limit: 65535
     t.index ["item_id"], name: "index_ratings_on_item_id", using: :btree
     t.index ["user_id"], name: "index_ratings_on_user_id", using: :btree
   end

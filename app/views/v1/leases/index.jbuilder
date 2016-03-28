@@ -1,5 +1,6 @@
 leases = @leases
 
+
 json.leases do
   json.array! leases do |lease|
     json.partial! 'v1/leases/detail', lease: lease

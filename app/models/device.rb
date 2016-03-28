@@ -36,6 +36,5 @@ class Device < Item
     self.is_readable = false
     self.is_leaseable = true
     self.is_rateable = false
-    self.is_reviewable = false
   end
 end
