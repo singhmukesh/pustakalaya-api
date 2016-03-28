@@ -65,3 +65,9 @@ en:
       subject: Nofication for book
       message: The book '%{book_name}' which you have added to watchlist has been %{operation}.
       message_body: Please find the details below.
+    notify_past_due_date:
+      subject: Book has passed the due date.
+      message: The book '%{book_name}' you have borrowed has passed the due date. Please return it as soon as possible.
+    notify_near_due_date:
+      subject: Book is near the due date.
+      message: Please return the book '%{book_name}' by tomorrow.

@@ -191,10 +191,10 @@ RSpec.describe V1::ItemsController, type: :controller do
     end
   end
 
-  describe '#change_status' do
+  describe '#status' do
     context 'when status params is valid' do
       before do
-        put :change_status, params: {id: book.id, status: Item.statuses.keys[Item.statuses[:INACTIVE]]}
+        put :status, params: {id: book.id, status: Item.statuses.keys[Item.statuses[:INACTIVE]]}
       end
 
       it 'should respond with status ok' do
@@ -209,7 +209,7 @@ RSpec.describe V1::ItemsController, type: :controller do
 
     context 'when status params is invalid' do
       before do
-        put :change_status, params: {id: book.id, status: Faker::Lorem.word}
+        put :status, params: {id: book.id, status: Faker::Lorem.word}
       end
 
       it 'should respond with status unprocessable_entity' do

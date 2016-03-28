@@ -33,6 +33,11 @@ gem 'sinatra', github: 'sinatra/sinatra', branch: 'master', require: nil
 gem 'rack-cors', require: 'rack/cors'
 # Access to goodreads.com API
 gem 'goodreads', '~> 0.4.3'
+# Schedule background tasks
+gem 'clockwork'
+# Daemonize tasks
+gem 'daemons'
+
 
 group :development, :test do
   # Call 'binding.pry' anywhere in the code to stop execution and get a debugger console

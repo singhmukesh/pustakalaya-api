@@ -198,4 +198,29 @@ RSpec.describe Lease, type: :model do
       end
     end
   end
+
+  describe '.notify_past_due_date' do
+
+    before do
+      lease = FactoryGirl.create(:lease, :lease_book)
+      lease.update(due_date: DateTime.now - 2.days)
+    end
+
+    it "should send email notifications" do
+      expect { Lease.notify_past_due_date }.to change { Sidekiq::Extensions::DelayedMailer.jobs.size }.by(1)
+    end
+  end
+
+  describe '.notify_near_due_date' do
+
+    before do
+      lease = FactoryGirl.create(:lease, :lease_book)
+      lease.update(due_date: DateTime.now - 2.days)
+    end
+
+    it "should send email notifications" do
+      expect { Lease.notify_near_due_date }.to change { Sidekiq::Extensions::DelayedMailer.jobs.size }.by(1)
+    end
+  end
+
 end

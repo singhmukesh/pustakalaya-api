@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   namespace :v1, defaults: {format: :json} do
     resources :items, only: [:index, :show, :create, :update] do
       member do
-        put :change_status
+        put :status
       end
       collection do
         get :inactive
@@ -17,7 +17,7 @@ Rails.application.routes.draw do
       end
     end
     resources :leases, only: [:index, :create] do
-      collection do
+      member do
         post :return
       end
     end

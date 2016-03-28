@@ -1,6 +1,6 @@
 class V1::ItemsController < V1::ApplicationController
-  before_action :set_item, only: [:show, :change_status, :update]
-  before_action :authorize_item, only: [:create, :change_status]
+  before_action :set_item, only: [:show, :status, :update]
+  before_action :authorize_item, only: [:create, :status]
   before_action :filter, only: [:index, :inactive]
 
   def index
@@ -41,8 +41,8 @@ class V1::ItemsController < V1::ApplicationController
   # @required status [Integer] 0 to Activate and 1 to Deactivate
   #
   # @response [Json]
-  def change_status
-    @item.update({status: Item.statuses[status]})
+  def status
+    @item.update({status: Item.statuses[params[:status].upcase.to_sym]})
   end
 
   # @url v1/items/most_rated/
@@ -83,10 +83,6 @@ class V1::ItemsController < V1::ApplicationController
 
   def set_item
     @item = Item.find(params[:id])
-  end
-
-  def status
-    params[:status].upcase.to_sym
   end
 
   def filter
